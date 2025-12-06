@@ -40,7 +40,7 @@ public class CategoriaDAO {
         boolean resp = false;
         try (Connection cn = Conexion.getConexion();
              PreparedStatement ps = cn.prepareStatement(
-                 "UPDATE categoria SET nombre=?, descripcion=?, estado=? WHERE idCategoria=?")) {
+                 "UPDATE categoria SET nombre=?, descripcion=?, estado=? WHERE id_categoria=?")) {
             ps.setString(1, c.getNombre());
             ps.setString(2, c.getDescripcion());
             ps.setInt(3, c.getEstado());
@@ -56,7 +56,7 @@ public class CategoriaDAO {
     public boolean eliminar(int idCategoria) {
         boolean resp = false;
         try (Connection cn = Conexion.getConexion();
-             PreparedStatement ps = cn.prepareStatement("DELETE FROM categoria WHERE idCategoria=?")) {
+             PreparedStatement ps = cn.prepareStatement("DELETE FROM categoria WHERE id_categoria=?")) {
             ps.setInt(1, idCategoria);
             resp = ps.executeUpdate() > 0;
         } catch (Exception e) {
@@ -68,12 +68,13 @@ public class CategoriaDAO {
     // Listar todas las categorías activas (para combos)
     public List<Categoria> listar() {
         List<Categoria> lista = new ArrayList<>();
+        String sql = "SELECT id_categoria, nombre, descripcion, estado FROM categoria WHERE estado=1";
         try (Connection cn = Conexion.getConexion();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM categoria WHERE estado=1");
+             PreparedStatement ps = cn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Categoria c = new Categoria();
-                c.setIdCategoria(rs.getInt("idCategoria"));
+                c.setIdCategoria(rs.getInt("id_categoria"));
                 c.setNombre(rs.getString("nombre"));
                 c.setDescripcion(rs.getString("descripcion"));
                 c.setEstado(rs.getInt("estado"));
@@ -88,13 +89,14 @@ public class CategoriaDAO {
     // Listar categorías con filtro (para búsquedas)
     public List<Categoria> listar(String filtro) {
         List<Categoria> lista = new ArrayList<>();
+        String sql = "SELECT id_categoria, nombre, descripcion, estado FROM categoria WHERE nombre LIKE ?";
         try (Connection cn = Conexion.getConexion();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM categoria WHERE nombre LIKE ?")) {
+             PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, "%" + filtro + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Categoria c = new Categoria();
-                c.setIdCategoria(rs.getInt("idCategoria"));
+                c.setIdCategoria(rs.getInt("id_categoria"));
                 c.setNombre(rs.getString("nombre"));
                 c.setDescripcion(rs.getString("descripcion"));
                 c.setEstado(rs.getInt("estado"));
@@ -109,8 +111,9 @@ public class CategoriaDAO {
     // Buscar nombre por ID (para mostrar en tabla de productos)
     public String buscarPorId(int idCategoria) {
         String nombre = "";
+        String sql = "SELECT nombre FROM categoria WHERE id_categoria=?";
         try (Connection cn = Conexion.getConexion();
-             PreparedStatement ps = cn.prepareStatement("SELECT nombre FROM categoria WHERE idCategoria=?")) {
+             PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idCategoria);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

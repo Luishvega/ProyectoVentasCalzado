@@ -20,12 +20,13 @@ public class TallaDAO {
     // Listar todas las tallas activas (para combos)
     public List<Talla> listar() {
         List<Talla> lista = new ArrayList<>();
+        String sql = "SELECT id_talla, etiqueta, estado FROM talla WHERE estado=1";
         try (Connection cn = Conexion.getConexion();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM talla WHERE estado=1");
+             PreparedStatement ps = cn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Talla t = new Talla();
-                t.setIdTalla(rs.getInt("idtalla"));
+                t.setIdTalla(rs.getInt("id_talla"));
                 t.setEtiqueta(rs.getString("etiqueta"));
                 t.setEstado(rs.getInt("estado"));
                 lista.add(t);
@@ -36,16 +37,17 @@ public class TallaDAO {
         return lista;
     }
 
-    // Listar tallas con filtro (opcional, para búsquedas)
+    // Listar tallas con filtro (para búsquedas)
     public List<Talla> listar(String filtro) {
         List<Talla> lista = new ArrayList<>();
+        String sql = "SELECT id_talla, etiqueta, estado FROM talla WHERE etiqueta LIKE ? AND estado=1";
         try (Connection cn = Conexion.getConexion();
-             PreparedStatement ps = cn.prepareStatement("SELECT * FROM talla WHERE etiqueta LIKE ? AND estado=1")) {
+             PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setString(1, "%" + filtro + "%");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Talla t = new Talla();
-                t.setIdTalla(rs.getInt("idtalla"));
+                t.setIdTalla(rs.getInt("id_talla"));
                 t.setEtiqueta(rs.getString("etiqueta"));
                 t.setEstado(rs.getInt("estado"));
                 lista.add(t);
@@ -59,8 +61,9 @@ public class TallaDAO {
     // Buscar etiqueta por ID (para mostrar en tabla de productos)
     public String buscarPorId(int idTalla) {
         String etiqueta = "";
+        String sql = "SELECT etiqueta FROM talla WHERE id_talla=?";
         try (Connection cn = Conexion.getConexion();
-             PreparedStatement ps = cn.prepareStatement("SELECT etiqueta FROM talla WHERE idtalla=?")) {
+             PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idTalla);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {

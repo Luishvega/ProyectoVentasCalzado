@@ -69,9 +69,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         mnuCompras.setEnabled(!esVendedor);
     }
 
-    private void abrirFormulario(javax.swing.JInternalFrame frm) {
-        escritorio.add(frm);   // escritorio es tu JDesktopPane
-        frm.setVisible(true);
+    private void abrirFormulario(javax.swing.JInternalFrame frame) {
+        escritorio.add(frame);   // escritorio es tu JDesktopPane
+        frame.setVisible(true);
     }
 
     // Acción del menú Ventas
@@ -275,6 +275,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
     private void mnuProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuProductosActionPerformed
         abrirFormulario(new FrmProductos());
+      
     }//GEN-LAST:event_mnuProductosActionPerformed
 
     /**
