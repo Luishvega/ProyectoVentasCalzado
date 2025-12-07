@@ -52,23 +52,45 @@ public class CategoriaDAO {
         return resp;
     }
 
-    // Eliminar categoría
-    public boolean eliminar(int idCategoria) {
+    // Desactivar categoría (cambiar estado a 0)
+    public boolean desactivar(int idCategoria) {
         boolean resp = false;
         try (Connection cn = Conexion.getConexion();
-             PreparedStatement ps = cn.prepareStatement("DELETE FROM categoria WHERE id_categoria=?")) {
+             PreparedStatement ps = cn.prepareStatement(
+                 "UPDATE categoria SET estado=0 WHERE id_categoria=?")) {
             ps.setInt(1, idCategoria);
             resp = ps.executeUpdate() > 0;
         } catch (Exception e) {
-            System.out.println("Error al eliminar categoría: " + e.getMessage());
+            System.out.println("Error al desactivar categoría: " + e.getMessage());
         }
         return resp;
     }
 
-    // Listar todas las categorías activas (para combos)
+    // Listar todas las categorías (activas e inactivas)
+    public List<Categoria> listarTodas() {
+        List<Categoria> lista = new ArrayList<>();
+        String sql = "SELECT id_categoria, nombre, descripcion, estado FROM categoria ORDER BY nombre";
+        try (Connection cn = Conexion.getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Categoria c = new Categoria();
+                c.setIdCategoria(rs.getInt("id_categoria"));
+                c.setNombre(rs.getString("nombre"));
+                c.setDescripcion(rs.getString("descripcion"));
+                c.setEstado(rs.getInt("estado"));
+                lista.add(c);
+            }
+        } catch (Exception e) {
+            System.out.println("Error al listar categorías: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    // Listar solo categorías activas (para combos)
     public List<Categoria> listar() {
         List<Categoria> lista = new ArrayList<>();
-        String sql = "SELECT id_categoria, nombre, descripcion, estado FROM categoria WHERE estado=1";
+        String sql = "SELECT id_categoria, nombre, descripcion, estado FROM categoria WHERE estado=1 ORDER BY nombre";
         try (Connection cn = Conexion.getConexion();
              PreparedStatement ps = cn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {

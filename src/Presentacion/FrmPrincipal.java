@@ -63,10 +63,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }
 
     private void controlarAcceso(int idRol) {
-        boolean esVendedor = (idRol == 2);
-        mnuUsuarios.setEnabled(!esVendedor);
-        mnuRoles.setEnabled(!esVendedor);
-        mnuCompras.setEnabled(!esVendedor);
+        // Control de acceso según rol (si se requiere en el futuro)
     }
 
     private void abrirFormulario(javax.swing.JInternalFrame frame) {
@@ -105,15 +102,10 @@ public class FrmPrincipal extends javax.swing.JFrame {
         mnuProveedores = new javax.swing.JMenuItem();
         mnuProductos = new javax.swing.JMenuItem();
         jMenuItem4 = new javax.swing.JMenuItem();
-        mnuUsuarios = new javax.swing.JMenuItem();
-        mnuRoles = new javax.swing.JMenuItem();
         mnuCompras = new javax.swing.JMenu();
         mnuVentas = new javax.swing.JMenuItem();
-        jMenuItem8 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
-        jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
-        jMenuItem11 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sistema de Ventas – Menú Principal");
@@ -178,19 +170,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jMenu2.add(mnuProductos);
 
-        jMenuItem4.setText("Categorias");
-        jMenu2.add(jMenuItem4);
-
-        mnuUsuarios.setText("Usuarios");
-        mnuUsuarios.addActionListener(new java.awt.event.ActionListener() {
+        jMenuItem4.setText("Categorías y Marcas");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                mnuUsuariosActionPerformed(evt);
+                jMenuItem4ActionPerformed(evt);
             }
         });
-        jMenu2.add(mnuUsuarios);
+        jMenu2.add(jMenuItem4);
 
-        mnuRoles.setText("Roles");
-        jMenu2.add(mnuRoles);
 
         jMenuBar1.add(jMenu2);
 
@@ -204,21 +191,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         mnuCompras.add(mnuVentas);
 
-        jMenuItem8.setText("Compras");
-        mnuCompras.add(jMenuItem8);
 
         jMenuBar1.add(mnuCompras);
 
         jMenu6.setText("Reportes");
 
-        jMenuItem9.setText("Inventario");
-        jMenu6.add(jMenuItem9);
-
         jMenuItem10.setText("Ventas por fecha");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
         jMenu6.add(jMenuItem10);
-
-        jMenuItem11.setText("Compras por proveedor");
-        jMenu6.add(jMenuItem11);
 
         jMenuBar1.add(jMenu6);
 
@@ -257,10 +241,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
        abrirFormulario(new FrmProveedores());
     }//GEN-LAST:event_mnuProveedoresActionPerformed
 
-    private void mnuUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUsuariosActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_mnuUsuariosActionPerformed
-
     private void mnuSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuSalirActionPerformed
        javax.swing.JInternalFrame activo = escritorio.getSelectedFrame();
     if (activo != null) {
@@ -277,6 +257,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
         abrirFormulario(new FrmProductos());
       
     }//GEN-LAST:event_mnuProductosActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {
+        abrirFormulario(new FrmReporteVentas());
+    }
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {
+        abrirFormulario(new FrmCategoriasMarcas());
+    }
 
     /**
      * @param args the command line arguments
@@ -321,10 +309,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu6;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem10;
-    private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JLabel lblFechaHora;
     private javax.swing.JLabel lblRol;
     private javax.swing.JLabel lblUsuario;
@@ -332,9 +317,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu mnuCompras;
     private javax.swing.JMenuItem mnuProductos;
     private javax.swing.JMenuItem mnuProveedores;
-    private javax.swing.JMenuItem mnuRoles;
     private javax.swing.JMenuItem mnuSalir;
-    private javax.swing.JMenuItem mnuUsuarios;
     private javax.swing.JMenuItem mnuVentas;
     private javax.swing.JPanel panelEstado;
     // End of variables declaration//GEN-END:variables

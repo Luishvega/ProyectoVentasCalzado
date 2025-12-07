@@ -25,17 +25,22 @@ public class ProductoDAO {
         PreparedStatement ps = null;
         try {
             cn = Conexion.getConexion();
-            String sql = "INSERT INTO producto (nombre, descripcion, precio, stock, idCategoria, estado) VALUES (?, ?, ?, ?, ?, ?)";
+            String sql = "INSERT INTO producto (codigo_barras, nombre, descripcion, precio, stock, idCategoria, idMarca, idTalla, color, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             ps = cn.prepareStatement(sql);
-            ps.setString(1, p.getNombre());
-            ps.setString(2, p.getDescripcion());
-            ps.setDouble(3, p.getPrecio());
-            ps.setInt(4, p.getStock());
-            ps.setInt(5, p.getIdCategoria());
-            ps.setInt(6, p.getEstado());
+            ps.setInt(1, p.getCodigobarras() != null ? Integer.parseInt(p.getCodigobarras().replace("CB-", "")) : 0);
+            ps.setString(2, p.getNombre());
+            ps.setString(3, p.getDescripcion());
+            ps.setDouble(4, p.getPrecio());
+            ps.setInt(5, p.getStock());
+            ps.setInt(6, p.getIdCategoria());
+            ps.setInt(7, p.getIdmarca());
+            ps.setInt(8, p.getIdtalla());
+            ps.setString(9, p.getColor());
+            ps.setInt(10, p.getEstado());
             resp = ps.executeUpdate() > 0;
         } catch (Exception e) {
             System.out.println("Error al insertar producto: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             try { if (ps != null) ps.close(); if (cn != null) cn.close(); } catch (Exception ex) {}
         }
@@ -51,18 +56,23 @@ public class ProductoDAO {
         PreparedStatement ps = null;
         try {
             cn = Conexion.getConexion();
-            String sql = "UPDATE producto SET nombre=?, descripcion=?, precio=?, stock=?, idCategoria=?, estado=? WHERE idProducto=?";
+            String sql = "UPDATE producto SET codigo_barras=?, nombre=?, descripcion=?, precio=?, stock=?, idCategoria=?, idMarca=?, idTalla=?, color=?, estado=? WHERE idProducto=?";
             ps = cn.prepareStatement(sql);
-            ps.setString(1, p.getNombre());
-            ps.setString(2, p.getDescripcion());
-            ps.setDouble(3, p.getPrecio());
-            ps.setInt(4, p.getStock());
-            ps.setInt(5, p.getIdCategoria());
-            ps.setInt(6, p.getEstado());
-            ps.setInt(7, p.getIdProducto());
+            ps.setInt(1, p.getCodigobarras() != null ? Integer.parseInt(p.getCodigobarras().replace("CB-", "")) : 0);
+            ps.setString(2, p.getNombre());
+            ps.setString(3, p.getDescripcion());
+            ps.setDouble(4, p.getPrecio());
+            ps.setInt(5, p.getStock());
+            ps.setInt(6, p.getIdCategoria());
+            ps.setInt(7, p.getIdmarca());
+            ps.setInt(8, p.getIdtalla());
+            ps.setString(9, p.getColor());
+            ps.setInt(10, p.getEstado());
+            ps.setInt(11, p.getIdProducto());
             resp = ps.executeUpdate() > 0;
         } catch (Exception e) {
             System.out.println("Error al actualizar producto: " + e.getMessage());
+            e.printStackTrace();
         } finally {
             try { if (ps != null) ps.close(); if (cn != null) cn.close(); } catch (Exception ex) {}
         }
@@ -172,11 +182,15 @@ public class ProductoDAO {
             while (rs.next()) {
                 Producto p = new Producto();
                 p.setIdProducto(rs.getInt("idProducto"));
+                p.setCodigobarras(String.valueOf(rs.getInt("codigo_barras")));
                 p.setNombre(rs.getString("nombre"));
                 p.setDescripcion(rs.getString("descripcion"));
                 p.setPrecio(rs.getDouble("precio"));
                 p.setStock(rs.getInt("stock"));
                 p.setIdCategoria(rs.getInt("idCategoria"));
+                p.setIdmarca(rs.getInt("idMarca"));
+                p.setIdtalla(rs.getInt("idTalla"));
+                p.setColor(rs.getString("color"));
                 p.setEstado(rs.getInt("estado"));
                 lista.add(p);
             }

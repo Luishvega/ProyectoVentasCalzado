@@ -132,7 +132,7 @@ public class VentaDAO implements VentaInterface {
     @Override
     public List<Venta> listar() {
         List<Venta> lista = new ArrayList<>();
-        String sql = "SELECT * FROM venta";
+        String sql = "SELECT * FROM venta ORDER BY fecha DESC";
         try (Connection cn = Conexion.getConexion();
              Statement st = cn.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -151,5 +151,65 @@ public class VentaDAO implements VentaInterface {
             e.printStackTrace();
         }
         return lista;
+    }
+    
+    // Listar ventas por rango de fechas
+    public List<Venta> listarPorFecha(java.util.Date fechaInicio, java.util.Date fechaFin) {
+        List<Venta> lista = new ArrayList<>();
+        String sql = "SELECT * FROM venta WHERE DATE(fecha) BETWEEN ? AND ? ORDER BY fecha DESC";
+        try (Connection cn = Conexion.getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setDate(1, new java.sql.Date(fechaInicio.getTime()));
+            ps.setDate(2, new java.sql.Date(fechaFin.getTime()));
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Venta v = new Venta();
+                v.setIdVenta(rs.getInt("id_venta"));
+                v.setFecha(rs.getTimestamp("fecha"));
+                v.setIdCliente(rs.getInt("id_cliente"));
+                v.setIdUsuario(rs.getInt("id_usuario"));
+                v.setTotal(rs.getDouble("total"));
+                v.setSubtotal(rs.getDouble("subtotal"));
+                v.setIgv(rs.getDouble("igv"));
+                lista.add(v);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return lista;
+    }
+    
+    // Obtener nombre del cliente por ID
+    public String obtenerNombreCliente(int idCliente) {
+        String nombre = "";
+        String sql = "SELECT CONCAT(nombres, ' ', apellidos) AS nombre FROM cliente WHERE id_cliente = ?";
+        try (Connection cn = Conexion.getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idCliente);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                nombre = rs.getString("nombre");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return nombre;
+    }
+    
+    // Obtener nombre del usuario por ID
+    public String obtenerNombreUsuario(int idUsuario) {
+        String nombre = "";
+        String sql = "SELECT nombre_usuario FROM usuario WHERE id_usuario = ?";
+        try (Connection cn = Conexion.getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                nombre = rs.getString("nombre_usuario");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return nombre;
     }
 }

@@ -208,7 +208,7 @@ public class FrmProductos extends javax.swing.JInternalFrame {
                 {null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "Código barras", "Nombre", "Categoría", "Marca", "Talla", "Color", "null", "Stock", "Descripción", "Estado"
+                "ID", "Código barras", "Nombre", "Categoría", "Marca", "Talla", "Color", "Precio", "Stock", "Descripción", "Estado"
             }
         ));
         jScrollPane1.setViewportView(tblProductos);
@@ -265,7 +265,6 @@ public class FrmProductos extends javax.swing.JInternalFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
                                     .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
