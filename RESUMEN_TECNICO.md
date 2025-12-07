@@ -2,52 +2,25 @@
 
 ## Descripción General
 
-Sistema de escritorio desarrollado en **Java SE** utilizando **NetBeans IDE** para la gestión integral de ventas de una tienda de calzado. Permite administrar productos, clientes, proveedores, usuarios y realizar operaciones de compra-venta con control de inventario.
+Sistema de escritorio desarrollado en **Java SE** utilizando **NetBeans IDE** para la gestión integral de una tienda de calzado. Permite administrar productos, clientes, proveedores, categorías, marcas y realizar operaciones de venta con control de inventario en tiempo real.
 
 ---
 
 ## 🏗️ Arquitectura del Sistema
 
-El proyecto implementa una **arquitectura de 3 capas** (Presentación, Lógica de Negocio/Datos, Persistencia):
+El proyecto implementa una **arquitectura de 3 capas** que separa las responsabilidades del sistema:
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                   CAPA DE PRESENTACIÓN                  │
-│              (Paquete: Presentacion)                    │
-│   FrmLogin, FrmPrincipal, FrmClientes, FrmProductos,    │
-│           FrmProveedores, FrmVenta                      │
-└─────────────────────────────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────┐
-│              CAPA DE ACCESO A DATOS (DAO)               │
-│                  (Paquete: Datos)                       │
-│   ProductoDAO, ClienteDAO, VentaDAO, UsuarioDAO, etc.   │
-│                                                         │
-│              Interfaces (Datos/Interfaces)              │
-│   ProductoInterface, ClienteInterface, VentaInterface   │
-└─────────────────────────────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────┐
-│                   CAPA DE ENTIDADES                     │
-│                 (Paquete: Entidades)                    │
-│   Producto, Cliente, Venta, DetalleVenta, Usuario, etc. │
-└─────────────────────────────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────┐
-│                  CAPA DE CONEXIÓN                       │
-│                  (Paquete: Conexion)                    │
-│                    Conexion.java                        │
-└─────────────────────────────────────────────────────────┘
-                           │
-                           ▼
-┌─────────────────────────────────────────────────────────┐
-│              BASE DE DATOS MySQL                        │
-│                   dbcalzado                             │
-└─────────────────────────────────────────────────────────┘
-```
+### Capa de Presentación
+Contiene todas las interfaces gráficas del usuario. Utiliza formularios Swing con un diseño MDI (Multiple Document Interface) que permite tener múltiples ventanas abiertas simultáneamente dentro de una ventana principal.
+
+### Capa de Acceso a Datos (DAO)
+Implementa el patrón DAO (Data Access Object) para encapsular toda la lógica de acceso a la base de datos. Cada entidad del sistema tiene su propio DAO que maneja las operaciones CRUD (Crear, Leer, Actualizar, Eliminar).
+
+### Capa de Entidades
+Define los objetos de negocio del sistema como clases Java (POJOs). Estas clases representan las tablas de la base de datos y contienen únicamente atributos y métodos getter/setter.
+
+### Capa de Conexión
+Gestiona la conexión con la base de datos MySQL mediante JDBC, proporcionando un punto centralizado para obtener conexiones.
 
 ---
 
@@ -55,299 +28,277 @@ El proyecto implementa una **arquitectura de 3 capas** (Presentación, Lógica d
 
 | Componente | Tecnología |
 |------------|------------|
-| **Lenguaje** | Java SE |
-| **IDE** | NetBeans IDE |
-| **GUI** | Java Swing |
-| **Base de Datos** | MySQL |
-| **Conector BD** | JDBC (MySQL Connector) |
-| **Patrón de Diseño** | DAO (Data Access Object) |
-| **Look & Feel** | Nimbus |
+| Lenguaje | Java SE 21 |
+| IDE | NetBeans IDE |
+| Interfaz Gráfica | Java Swing |
+| Base de Datos | MySQL 8.0 |
+| Conector BD | MySQL Connector/J 8.0.33 |
+| Selector de Fechas | JCalendar 1.4 (Toedter) |
+| Patrón de Diseño | DAO (Data Access Object) |
+| Look & Feel | Nimbus |
 
 ---
 
-## 📁 Estructura de Paquetes
+## 📁 Estructura del Proyecto
 
-```
-src/
-├── Conexion/
-│   ├── Conexion.java          # Singleton de conexión a MySQL
-│   └── DemoCnx.java           # Clase de prueba de conexión
-│
-├── Entidades/                  # POJOs (Plain Old Java Objects)
-│   ├── Producto.java
-│   ├── Cliente.java
-│   ├── Usuario.java
-│   ├── Venta.java
-│   ├── DetalleVenta.java
-│   ├── Compra.java
-│   ├── DetalleCompra.java
-│   ├── Proveedor.java
-│   ├── Categoria.java
-│   ├── Marca.java
-│   ├── Talla.java
-│   └── Rol.java
-│
-├── Datos/                      # Capa de Acceso a Datos
-│   ├── Interfaces/            # Contratos para los DAOs
-│   │   ├── ProductoInterface.java
-│   │   ├── ClienteInterface.java
-│   │   ├── VentaInterface.java
-│   │   └── ...
-│   ├── ProductoDAO.java
-│   ├── ClienteDAO.java
-│   ├── VentaDAO.java
-│   ├── UsuarioDAO.java
-│   └── ...
-│
-├── Presentacion/               # Interfaces gráficas (JFrame/JInternalFrame)
-│   ├── FrmLogin.java          # Formulario de inicio de sesión
-│   ├── FrmPrincipal.java      # Ventana principal MDI
-│   ├── FrmClientes.java
-│   ├── FrmProductos.java
-│   ├── FrmProveedores.java
-│   └── FrmVenta.java
-│
-└── Pruebas/
-    └── PruebaDAO.java         # Pruebas unitarias de DAOs
-```
+### Paquete Conexion
+Contiene la clase de conexión a la base de datos que centraliza los parámetros de conexión (URL, usuario, contraseña) y proporciona un método estático para obtener conexiones.
+
+### Paquete Entidades
+Incluye 12 clases que representan las entidades del negocio:
+- **Producto**: Artículos de calzado con sus características
+- **Cliente**: Información de los compradores
+- **Usuario**: Usuarios del sistema con credenciales
+- **Venta y DetalleVenta**: Transacciones de venta
+- **Compra y DetalleCompra**: Transacciones de compra
+- **Proveedor**: Proveedores de mercadería
+- **Categoria**: Clasificación de productos
+- **Marca**: Marcas de calzado
+- **Talla**: Tallas disponibles
+- **Rol**: Roles de usuario (Administrador, Vendedor)
+
+### Paquete Datos
+Contiene los DAOs e interfaces que definen los contratos de acceso a datos. Cada DAO implementa las operaciones específicas para su entidad.
+
+### Paquete Presentacion
+Contiene los formularios de la aplicación:
+- **FrmLogin**: Pantalla de inicio de sesión
+- **FrmPrincipal**: Ventana principal con menú y escritorio MDI
+- **FrmClientes**: Gestión de clientes
+- **FrmProveedores**: Gestión de proveedores
+- **FrmProductos**: Gestión de productos
+- **FrmCategoriasMarcas**: Gestión de categorías y marcas
+- **FrmVenta**: Registro de ventas
+- **FrmReporteVentas**: Reporte de ventas por fecha
 
 ---
 
-## 🗄️ Modelo de Base de Datos
+## 🗄️ Base de Datos
 
-### Entidades Principales
+### Estructura de Tablas
 
-| Entidad | Descripción | Campos Clave |
-|---------|-------------|--------------|
-| **Producto** | Artículos de calzado | id_producto, nombre, precio, stock, código_barras, id_categoria, id_marca, id_talla, color |
-| **Cliente** | Clientes del negocio | id_cliente, nombres, apellidos, dni, dirección, teléfono, estado |
-| **Usuario** | Usuarios del sistema | id_usuario, nombre_usuario, contraseña, id_rol, estado |
-| **Venta** | Cabecera de venta | id_venta, fecha, id_cliente, id_usuario, subtotal, igv, total |
-| **DetalleVenta** | Líneas de venta | id_detalle, id_venta, id_producto, cantidad, precio_unitario, subtotal |
-| **Compra** | Registro de compras | id_compra, fecha, id_proveedor, id_usuario, total |
-| **Proveedor** | Proveedores de productos | id_proveedor, nombre, ruc, dirección, teléfono |
-| **Categoria** | Categorías de productos | id_categoria, nombre, descripción |
-| **Marca** | Marcas de calzado | id_marca, nombre |
-| **Talla** | Tallas disponibles | id_talla, numero |
-| **Rol** | Roles de usuario | id_rol, nombre (Administrador, Vendedor) |
+El sistema utiliza una base de datos MySQL llamada **dbcalzado** con las siguientes tablas:
 
-### Diagrama de Relaciones
+| Tabla | Descripción |
+|-------|-------------|
+| rol | Roles del sistema (Administrador, Vendedor, Almacenero) |
+| usuario | Usuarios con credenciales y rol asignado |
+| cliente | Clientes con datos personales |
+| proveedor | Proveedores con razón social y RUC |
+| categoria | Categorías de productos (Zapatillas, Botas, etc.) |
+| marca | Marcas de calzado (Nike, Adidas, etc.) |
+| talla | Tallas disponibles (35-45) |
+| producto | Productos con precio, stock y características |
+| venta | Cabecera de ventas con totales |
+| detalle_venta | Productos vendidos en cada venta |
+| compra | Cabecera de compras a proveedores |
+| detalle_compra | Productos comprados en cada compra |
 
-```
-┌──────────────┐       ┌──────────────┐       ┌──────────────┐
-│   Usuario    │       │    Venta     │       │   Cliente    │
-│──────────────│       │──────────────│       │──────────────│
-│ id_usuario   │◄──────│ id_usuario   │       │ id_cliente   │
-│ nombre       │       │ id_cliente   │──────►│ nombres      │
-│ contraseña   │       │ fecha        │       │ apellidos    │
-│ id_rol       │       │ total        │       │ dni          │
-└──────────────┘       └──────┬───────┘       └──────────────┘
-       │                      │
-       ▼                      ▼
-┌──────────────┐       ┌──────────────┐       ┌──────────────┐
-│     Rol      │       │ DetalleVenta │       │   Producto   │
-│──────────────│       │──────────────│       │──────────────│
-│ id_rol       │       │ id_venta     │       │ id_producto  │◄┐
-│ nombre       │       │ id_producto  │──────►│ nombre       │ │
-└──────────────┘       │ cantidad     │       │ precio       │ │
-                       │ subtotal     │       │ stock        │ │
-                       └──────────────┘       │ id_categoria │ │
-                                              │ id_marca     │ │
-                                              │ id_talla     │ │
-                                              └──────────────┘ │
-                                                      ▲        │
-                       ┌──────────────┐               │        │
-                       │ DetalleCompra│───────────────┘        │
-                       │──────────────│                        │
-                       │ id_compra    │◄───────────────────────┤
-                       │ id_producto  │       ┌──────────────┐ │
-                       │ cantidad     │       │    Compra    │ │
-                       └──────────────┘       │──────────────│ │
-                                              │ id_compra    │─┘
-                                              │ id_proveedor │
-                                              │ id_usuario   │
-                                              └──────┬───────┘
-                                                     │
-                                                     ▼
-                                              ┌──────────────┐
-                                              │  Proveedor   │
-                                              │──────────────│
-                                              │ id_proveedor │
-                                              │ nombre       │
-                                              │ ruc          │
-                                              └──────────────┘
-```
+### Relaciones Principales
+
+- Un **Usuario** pertenece a un **Rol**
+- Una **Venta** la realiza un **Usuario** a un **Cliente**
+- Un **Producto** pertenece a una **Categoría**, **Marca** y **Talla**
+- Los **Detalles** vinculan las transacciones con los productos
+
+### Manejo de Estados
+
+El sistema implementa **eliminación lógica** mediante un campo `estado`:
+- **1 = Activo**: El registro está disponible
+- **0 = Inactivo**: El registro está desactivado (no se elimina físicamente)
 
 ---
 
-## 🔐 Sistema de Autenticación y Control de Acceso
+## 🔐 Sistema de Autenticación
 
-### Flujo de Autenticación
+### Proceso de Login
 
-1. El usuario ingresa credenciales en `FrmLogin`
-2. Se valida contra la base de datos mediante `UsuarioDAO`
-3. Se verifica que el usuario esté activo (`estado = 1`)
-4. Si es válido, se abre `FrmPrincipal` pasando el objeto `Usuario`
+1. El usuario ingresa su nombre de usuario y contraseña
+2. El sistema busca en la base de datos un usuario que coincida
+3. Verifica que el usuario esté activo (estado = 1)
+4. Si las credenciales son correctas, abre el menú principal
+5. El sistema registra qué usuario está logueado para las operaciones
 
-### Control de Roles
+### Usuarios por Defecto
 
-| Rol | ID | Permisos |
-|-----|----|----------|
-| **Administrador** | 1 | Acceso completo: Usuarios, Roles, Compras, Ventas, Mantenimientos |
-| **Vendedor** | 2 | Acceso limitado: Clientes, Productos, Ventas |
-
-```java
-private void controlarAcceso(int idRol) {
-    boolean esVendedor = (idRol == 2);
-    mnuUsuarios.setEnabled(!esVendedor);
-    mnuRoles.setEnabled(!esVendedor);
-    mnuCompras.setEnabled(!esVendedor);
-}
-```
+| Usuario | Contraseña | Rol |
+|---------|------------|-----|
+| admin | admin123 | Administrador |
+| vendedor1 | 123456 | Vendedor |
 
 ---
 
-## 💼 Funcionalidades Principales
+## 💼 Módulos del Sistema
 
-### 1. Módulo de Ventas
-- Registro de ventas con múltiples productos
-- Cálculo automático de subtotal, IGV y total
-- Control transaccional (commit/rollback)
-- Actualización automática de stock
-- Búsqueda de productos por código de barras o nombre
+### 1. Módulo de Login
+- Validación de credenciales contra la base de datos
+- Verificación de estado activo del usuario
+- Mensaje de error en credenciales incorrectas
+- Redirección automática al menú principal
 
-### 2. Módulo de Productos
-- CRUD completo de productos
-- Gestión de categorías, marcas y tallas
-- Control de stock
-- Código de barras
+### 2. Módulo Principal (Menú)
+- Interfaz MDI con escritorio para formularios internos
+- Barra de estado mostrando usuario, rol y fecha/hora
+- Menú organizado por categorías funcionales
+- Ventanas que se pueden cerrar, maximizar y minimizar
 
 ### 3. Módulo de Clientes
-- Registro y mantenimiento de clientes
-- Búsqueda por DNI o nombre
+- Registro de nuevos clientes con datos personales
+- Búsqueda por nombre o apellido
+- Edición de datos existentes
+- Visualización en tabla con todos los campos
+- Desactivación de clientes (eliminación lógica)
 
 ### 4. Módulo de Proveedores
-- Gestión de proveedores
-- Registro de compras
+- Registro de proveedores con razón social y RUC
+- Gestión de datos de contacto
+- Búsqueda y filtrado
+- Mantenimiento completo (crear, editar, desactivar)
 
-### 5. Módulo de Reportes *(planificado)*
-- Inventario
-- Ventas por fecha
-- Compras por proveedor
+### 5. Módulo de Productos
+- Registro de productos con todos sus atributos
+- Código de barras autogenerado
+- Selección de categoría, marca y talla desde combos
+- Control de stock y precios
+- Tabla con información completa del inventario
 
----
+### 6. Módulo de Categorías y Marcas
+- Gestión organizada en pestañas separadas
+- Crear nuevas categorías con nombre y descripción
+- Crear nuevas marcas
+- Editar seleccionando de la tabla
+- Desactivar con confirmación (no elimina, solo cambia estado)
+- Visualización del estado (Activo/Inactivo)
 
-## 🔄 Patrón DAO Implementado
+### 7. Módulo de Ventas
+- Selección de cliente desde combo
+- Búsqueda de productos por código o nombre
+- Agregar múltiples productos al carrito
+- Cálculo automático de:
+  - Subtotal por producto
+  - Subtotal general
+  - IGV (18%)
+  - Total final
+- Eliminación de productos del carrito
+- Registro de venta con actualización automática de stock
+- Manejo transaccional (si falla algo, se revierte todo)
 
-Cada entidad tiene su correspondiente DAO que implementa una interfaz:
-
-```java
-// Interface
-public interface ProductoInterface {
-    boolean insertar(Producto p);
-    boolean actualizar(Producto p);
-    boolean eliminar(int idProducto);
-    List<Producto> listar(String filtro);
-}
-
-// Implementación
-public class ProductoDAO implements ProductoInterface {
-    // Métodos CRUD con PreparedStatement
-}
-```
-
-### Operaciones CRUD típicas
-
-| Operación | Método | SQL |
-|-----------|--------|-----|
-| Create | `insertar()` | `INSERT INTO tabla...` |
-| Read | `listar()`, `buscarPorId()` | `SELECT * FROM tabla...` |
-| Update | `actualizar()` | `UPDATE tabla SET...` |
-| Delete | `eliminar()` | `DELETE FROM tabla...` |
-
----
-
-## 🔌 Conexión a Base de Datos
-
-```java
-public class Conexion {
-    private static final String URL = "jdbc:mysql://localhost:3306/dbcalzado";
-    private static final String USER = "root";
-    private static final String PASS = "12345678";
-
-    public static Connection getConexion() throws Exception {
-        return DriverManager.getConnection(URL, USER, PASS);
-    }
-}
-```
+### 8. Módulo de Reporte de Ventas
+- Selección de rango de fechas con calendario visual
+- Fecha actual por defecto al abrir
+- Filtrado de ventas por período
+- Visualización de todas las ventas con:
+  - ID de venta
+  - Fecha y hora
+  - Nombre del cliente
+  - Nombre del vendedor
+  - Subtotal, IGV y Total
+- Contador de ventas encontradas
+- Suma total del período consultado
 
 ---
 
-## 📊 Transacciones
+## 🔄 Características Técnicas
 
-El sistema implementa **transacciones ACID** para operaciones críticas como el registro de ventas:
+### Transacciones
+Las operaciones críticas como el registro de ventas utilizan transacciones de base de datos para garantizar la integridad de los datos. Si ocurre un error durante el proceso, todos los cambios se revierten automáticamente.
 
-```java
-public boolean registrarVentaConDetalles(Venta venta, List<DetalleVenta> detalles) {
-    cn.setAutoCommit(false);  // Iniciar transacción
-    
-    // 1. Insertar cabecera de venta
-    // 2. Obtener ID generado
-    // 3. Insertar cada detalle
-    // 4. Actualizar stock de cada producto
-    
-    cn.commit();  // Confirmar si todo OK
-    // o
-    cn.rollback();  // Revertir si hay error
-}
-```
+### Control de Inventario
+Cada vez que se registra una venta, el sistema actualiza automáticamente el stock de los productos vendidos, restando las cantidades correspondientes.
+
+### Validaciones
+- Campos obligatorios verificados antes de guardar
+- Confirmación antes de desactivar registros
+- Mensajes de éxito y error informativos
+- Validación de fechas en reportes
+
+### Interfaz de Usuario
+- Diseño consistente en todos los formularios
+- Botones con acciones claras (Guardar, Eliminar, Limpiar, Buscar)
+- Tablas con datos organizados y legibles
+- Formularios que se pueden redimensionar y reorganizar
+- Componentes de fecha con calendario visual
 
 ---
 
-## 🖥️ Interfaz de Usuario
+## 📊 Flujo de una Venta
 
-- **Patrón MDI** (Multiple Document Interface) con `JDesktopPane`
-- Formularios internos (`JInternalFrame`) para cada módulo
-- Barra de estado con usuario activo, rol y fecha/hora
-- Menú principal con acceso según permisos
-- Look & Feel **Nimbus** para apariencia moderna
+1. El vendedor abre el módulo de Ventas
+2. Selecciona un cliente del listado
+3. Ingresa el código del producto o busca por nombre
+4. El sistema muestra la información del producto
+5. Ingresa la cantidad deseada
+6. Agrega el producto al carrito
+7. Repite para más productos si es necesario
+8. Verifica los totales calculados automáticamente
+9. Presiona "Registrar Venta"
+10. El sistema:
+    - Guarda la cabecera de la venta
+    - Guarda cada detalle
+    - Descuenta el stock de cada producto
+    - Muestra confirmación de éxito
 
 ---
 
 ## 📋 Requisitos del Sistema
 
-- **JDK**: Java 8 o superior
-- **MySQL**: 5.7 o superior
-- **Driver**: MySQL Connector/J
-- **RAM**: 512 MB mínimo
-- **SO**: Windows, Linux o macOS
+### Hardware Mínimo
+- Procesador: Cualquier procesador moderno
+- RAM: 512 MB (recomendado 1 GB)
+- Espacio: 100 MB para la aplicación
+
+### Software Requerido
+- Java JDK 21 o superior
+- MySQL Server 8.0 o superior
+- Sistema Operativo: Windows, Linux o macOS
+
+### Librerías Externas
+- MySQL Connector/J 8.0.33
+- JCalendar 1.4
 
 ---
 
-## 🚀 Ejecución
+## 🚀 Instalación y Ejecución
 
-1. Crear la base de datos `dbcalzado` en MySQL
-2. Ejecutar scripts de creación de tablas
-3. Configurar credenciales en `Conexion.java`
-4. Compilar y ejecutar `FrmLogin.java`
+### Paso 1: Base de Datos
+Ejecutar el script SQL proporcionado en la carpeta `database/` para crear la base de datos con todas las tablas y datos iniciales.
 
----
+### Paso 2: Configuración
+Verificar los parámetros de conexión en la clase Conexion:
+- Host: localhost
+- Puerto: 3306
+- Base de datos: dbcalzado
+- Usuario y contraseña de MySQL
 
-## 📝 Notas Técnicas
+### Paso 3: Ejecución
+Compilar y ejecutar el proyecto desde NetBeans o ejecutar el JAR generado en la carpeta `dist/`.
 
-- Las contraseñas se almacenan en texto plano (se recomienda implementar hash)
-- El sistema soporta eliminación lógica mediante campo `estado`
-- Los formularios `.form` son diseñados con el GUI Builder de NetBeans
-- El IGV se calcula sobre el subtotal en las ventas
-
----
-
-## 👥 Autores
-
-Proyecto desarrollado como sistema de gestión comercial para tienda de calzado.
+### Paso 4: Acceso
+Ingresar con las credenciales de usuario (admin/admin123 por defecto).
 
 ---
 
-*Documentación generada para explicación técnica del proyecto.*
+## 📝 Consideraciones Finales
 
+### Seguridad
+- Las contraseñas se almacenan en texto plano (para entorno educativo)
+- En producción se recomienda implementar hash de contraseñas
 
+### Escalabilidad
+- La arquitectura en capas permite agregar nuevos módulos fácilmente
+- Los DAOs pueden extenderse para nuevas funcionalidades
+
+### Mantenibilidad
+- Código organizado por responsabilidades
+- Nombres descriptivos en clases y métodos
+- Separación clara entre interfaz y lógica
+
+---
+
+## 👥 Créditos
+
+Sistema desarrollado como proyecto de gestión comercial para tienda de calzado, implementando las mejores prácticas de desarrollo en Java con acceso a bases de datos.
+
+---
+
+*Documentación actualizada - Sistema de Ventas de Calzado v1.0*
