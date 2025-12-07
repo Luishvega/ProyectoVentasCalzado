@@ -198,6 +198,68 @@ El sistema implementa **eliminación lógica** mediante un campo `estado`:
 
 ---
 
+## 🎯 Programación Orientada a Objetos (POO)
+
+El proyecto implementa los principales conceptos de POO para demostrar buenas prácticas de desarrollo:
+
+### Herencia en Entidades
+
+El sistema utiliza **clases abstractas** como base para entidades relacionadas:
+
+**Clase Persona (abstracta)**
+- Es la clase padre de `Cliente`
+- Define atributos comunes: nombres, apellidos, teléfono, dirección, estado
+- Los getters y setters son heredados por las clases hijas
+- Incluye un método abstracto `getTipoPersona()` que cada clase hija implementa
+
+**Clase Transaccion (abstracta)**
+- Es la clase padre de `Venta`
+- Define atributos comunes: fecha, idUsuario, total
+- Incluye un método abstracto `getTipoTransaccion()` para polimorfismo
+
+### Polimorfismo
+
+Se demuestra mediante **métodos abstractos** que cada clase hija implementa de forma diferente:
+
+- `getTipoPersona()`: Cliente retorna "Cliente", otras clases retornarían su tipo
+- `getTipoTransaccion()`: Venta retorna "Venta", Compra retornaría "Compra"
+- `getNombreTabla()`: Cada DAO retorna el nombre de su tabla correspondiente
+
+Esto permite tratar objetos de diferentes tipos de manera uniforme.
+
+### Herencia en Capa de Datos
+
+**Clase BaseDAO (abstracta)**
+- Es la clase padre de los DAOs del sistema
+- Define métodos comunes: `getConexion()`, `cerrarRecursos()`
+- Define métodos abstractos: `insertar()`, `listar()`, `getNombreTabla()`
+- Utiliza **Generics** para trabajar con diferentes tipos de entidades
+
+**CategoriaDAO hereda de BaseDAO**
+- Implementa los métodos abstractos de la clase padre
+- Usa los métodos heredados para conexión y cierre de recursos
+- Agrega métodos específicos como `listarTodas()` y `buscarPorId()`
+
+### Beneficios de POO en el Proyecto
+
+| Concepto | Beneficio |
+|----------|-----------|
+| Herencia | Reutilización de código, atributos comunes en una sola clase |
+| Polimorfismo | Flexibilidad para tratar objetos de diferentes tipos |
+| Abstracción | Define contratos que las clases hijas deben cumplir |
+| Encapsulamiento | Protege los datos con modificadores de acceso |
+
+### Diagrama de Herencia
+
+**Entidades:**
+- Persona (abstracta) → Cliente
+- Transaccion (abstracta) → Venta
+
+**Capa de Datos:**
+- BaseDAO (abstracta) → CategoriaDAO
+
+---
+
 ## 🔄 Características Técnicas
 
 ### Transacciones

@@ -1,37 +1,42 @@
 /*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ * Clase Venta - Hereda de Transaccion (HERENCIA)
+ * Demuestra cómo una clase hija extiende la funcionalidad de la clase padre
  */
 package Entidades;
 
 import java.util.Date;
-/**
- *
- * @author macbook
- */
 
-public class Venta {
+/**
+ * Clase Venta que HEREDA de la clase abstracta Transaccion.
+ * Mantiene sus atributos propios (idVenta, idCliente, subtotal, igv) y hereda
+ * los atributos comunes de Transaccion (fecha, idUsuario, total)
+ * 
+ * @author Proyecto Calzado
+ */
+public class Venta extends Transaccion {
+    
+    // Atributos propios de Venta (no heredados)
     private int idVenta;
-    private Date fecha;
     private int idCliente;
-    private int idUsuario;
-    private double total;
     private double subtotal;
     private double igv;
 
+    // Constructor vacío
     public Venta() {
+        super(); // Llama al constructor de la clase padre
     }
 
-    public Venta(int idVenta, Date fecha, int idCliente, int idUsuario, double total, double subtotal, double igv) {
+    // Constructor completo usando super() para inicializar atributos heredados
+    public Venta(int idVenta, Date fecha, int idCliente, int idUsuario, 
+                 double total, double subtotal, double igv) {
+        super(fecha, idUsuario, total); // Herencia - inicializa atributos de Transaccion
         this.idVenta = idVenta;
-        this.fecha = fecha;
         this.idCliente = idCliente;
-        this.idUsuario = idUsuario;
-        this.total = total;
         this.subtotal = subtotal;
         this.igv = igv;
     }
 
+    // Getters y Setters propios de Venta
     public int getIdVenta() {
         return idVenta;
     }
@@ -40,36 +45,12 @@ public class Venta {
         this.idVenta = idVenta;
     }
 
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
     public int getIdCliente() {
         return idCliente;
     }
 
     public void setIdCliente(int idCliente) {
         this.idCliente = idCliente;
-    }
-
-    public int getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
     }
 
     public double getSubtotal() {
@@ -87,6 +68,23 @@ public class Venta {
     public void setIgv(double igv) {
         this.igv = igv;
     }
-
     
+    /**
+     * Implementación del método abstracto getTipoTransaccion() - POLIMORFISMO
+     * Cada clase hija implementa este método de forma diferente
+     * @return Tipo de transacción
+     */
+    @Override
+    public String getTipoTransaccion() {
+        return "Venta";
+    }
+    
+    /**
+     * Método propio de Venta para calcular el IGV
+     * @param subtotal Subtotal de la venta
+     * @return Valor del IGV (18%)
+     */
+    public double calcularIGV(double subtotal) {
+        return subtotal * 0.18;
+    }
 }
