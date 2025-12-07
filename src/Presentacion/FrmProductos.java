@@ -28,6 +28,14 @@ public class FrmProductos extends javax.swing.JInternalFrame {
 
     public FrmProductos() {
         initComponents();
+        
+        // Habilitar opciones del menú de la ventana
+        setClosable(true);      // Permitir cerrar
+        setMaximizable(true);   // Permitir maximizar
+        setIconifiable(true);   // Permitir minimizar
+        setResizable(true);     // Permitir redimensionar
+        setTitle("Mantenimiento de Productos");
+        
         cargarCategorias();
         cargarMarcas();
         cargarTallas();
@@ -257,7 +265,7 @@ public class FrmProductos extends javax.swing.JInternalFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel8)
                                     .addComponent(txtStock, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(txtBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)

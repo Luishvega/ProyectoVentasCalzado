@@ -31,7 +31,14 @@ public class FrmVenta extends javax.swing.JInternalFrame {
     
     public FrmVenta() {
         initComponents();
+        
+        // Habilitar opciones del menú de la ventana
+        setClosable(true);
+        setMaximizable(true);
+        setIconifiable(true);
+        setResizable(true);
         setTitle("Registro de Venta");
+        
         configurarTabla();
         cargarClientes();
         mostrarFecha();
@@ -126,7 +133,14 @@ private double getIGV(double subtotal) {
 public FrmVenta(int idUsuario) {
     initComponents();
     this.idUsuario = idUsuario;
+    
+    // Habilitar opciones del menú de la ventana
+    setClosable(true);
+    setMaximizable(true);
+    setIconifiable(true);
+    setResizable(true);
     setTitle("Registro de Venta");
+    
     configurarTabla();
     cargarClientes();
     mostrarFecha();

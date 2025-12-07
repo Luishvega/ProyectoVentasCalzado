@@ -21,7 +21,14 @@ public class FrmClientes extends javax.swing.JInternalFrame {
      */
     public FrmClientes() {
         initComponents();
+        
+        // Habilitar opciones del menú de la ventana
+        setClosable(true);
+        setMaximizable(true);
+        setIconifiable(true);
+        setResizable(true);
         setTitle("Clientes");
+        
         configurarTabla();
         cargarTabla("");
     }

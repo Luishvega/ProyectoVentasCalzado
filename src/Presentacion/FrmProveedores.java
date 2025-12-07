@@ -22,9 +22,16 @@ public class FrmProveedores extends javax.swing.JInternalFrame {
      */
     public FrmProveedores() {
         initComponents();
-    setTitle("Proveedores");
-    configurarTabla();   // aquí reemplazas los títulos por los correctos
-    cargarTabla("");     // carga los datos desde la BD
+        
+        // Habilitar opciones del menú de la ventana
+        setClosable(true);
+        setMaximizable(true);
+        setIconifiable(true);
+        setResizable(true);
+        setTitle("Proveedores");
+        
+        configurarTabla();
+        cargarTabla("");
     }
     
     private void cargarTabla(String filtro) {

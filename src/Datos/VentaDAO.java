@@ -99,7 +99,7 @@ public class VentaDAO implements VentaInterface {
                 psDetalle.executeUpdate();
 
                 // Actualizar stock
-                String sqlStock = "UPDATE producto SET stock = stock - ? WHERE id_producto = ?";
+                String sqlStock = "UPDATE producto SET stock = stock - ? WHERE idProducto = ?";
                 try (PreparedStatement psStock = cn.prepareStatement(sqlStock)) {
                     psStock.setInt(1, d.getCantidad());
                     psStock.setInt(2, d.getIdProducto());

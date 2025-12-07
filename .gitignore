@@ -1,0 +1,21 @@
+# NetBeans
+/build/
+/dist/
+/nbproject/private/
+
+# Maven
+/target/
+
+# Librerías (se descargan con Maven o manualmente)
+/lib/
+
+# IDE
+*.iml
+.idea/
+.vscode/
+
+# Python venv
+/venv/
+
+# OS
+.DS_Store

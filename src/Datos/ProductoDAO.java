@@ -106,21 +106,21 @@ public class ProductoDAO {
     }
     
     public Producto buscarPorId(int idProducto) {
-    String sql = "SELECT * FROM producto WHERE id_producto=?";
+    String sql = "SELECT * FROM producto WHERE idProducto=?";
     try (Connection cn = Conexion.getConexion();
          PreparedStatement ps = cn.prepareStatement(sql)) {
         ps.setInt(1, idProducto);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             Producto p = new Producto();
-            p.setIdProducto(rs.getInt("id_producto"));
+            p.setIdProducto(rs.getInt("idProducto"));
             p.setCodigobarras(rs.getString("codigo_barras"));
             p.setNombre(rs.getString("nombre"));
-            p.setIdCategoria(rs.getInt("id_categoria"));
-            p.setIdmarca(rs.getInt("id_marca"));
-            p.setIdtalla(rs.getInt("id_talla"));
+            p.setIdCategoria(rs.getInt("idCategoria"));
+            p.setIdmarca(rs.getInt("idMarca"));
+            p.setIdtalla(rs.getInt("idTalla"));
             p.setColor(rs.getString("color"));
-            p.setPrecio(rs.getDouble("precio_venta"));
+            p.setPrecio(rs.getDouble("precio"));
             p.setStock(rs.getInt("stock"));
             p.setDescripcion(rs.getString("descripcion"));
             p.setEstado(rs.getInt("estado"));
@@ -138,14 +138,14 @@ public class ProductoDAO {
     //método para obtener un producto por su ID
     public Producto obtenerPorId(int idProducto) {
     Producto p = null;
-    String sql = "SELECT id_producto, nombre, precio, stock FROM producto WHERE id_producto = ?";
+    String sql = "SELECT idProducto, nombre, precio, stock FROM producto WHERE idProducto = ?";
     try (Connection cn = Conexion.getConexion();
          PreparedStatement ps = cn.prepareStatement(sql)) {
         ps.setInt(1, idProducto);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             p = new Producto();
-            p.setIdProducto(rs.getInt("id_producto"));
+            p.setIdProducto(rs.getInt("idProducto"));
             p.setNombre(rs.getString("nombre"));
             p.setPrecio(rs.getDouble("precio"));
             p.setStock(rs.getInt("stock"));
