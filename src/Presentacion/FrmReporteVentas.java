@@ -13,10 +13,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author macbook
- */
+
 public class FrmReporteVentas extends javax.swing.JInternalFrame {
 
     private VentaDAO ventaDAO = new VentaDAO();

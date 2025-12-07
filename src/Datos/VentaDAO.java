@@ -12,10 +12,7 @@ import Datos.Interfaces.VentaInterface;
 import java.sql.*;
 import java.util.*;
 import javax.swing.JOptionPane;
-/**
- *
- * @author macbook
- */
+
 
 public class VentaDAO implements VentaInterface {
 

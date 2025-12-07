@@ -1,17 +1,15 @@
 /*
- * Clase Venta - Hereda de Transaccion (HERENCIA)
+ * Clase Venta
  * Demuestra cómo una clase hija extiende la funcionalidad de la clase padre
  */
 package Entidades;
 
 import java.util.Date;
 
-/**
- * Clase Venta que HEREDA de la clase abstracta Transaccion.
+/**S
  * Mantiene sus atributos propios (idVenta, idCliente, subtotal, igv) y hereda
  * los atributos comunes de Transaccion (fecha, idUsuario, total)
- * 
- * @author Proyecto Calzado
+ 
  */
 public class Venta extends Transaccion {
     
@@ -29,7 +27,7 @@ public class Venta extends Transaccion {
     // Constructor completo usando super() para inicializar atributos heredados
     public Venta(int idVenta, Date fecha, int idCliente, int idUsuario, 
                  double total, double subtotal, double igv) {
-        super(fecha, idUsuario, total); // Herencia - inicializa atributos de Transaccion
+        super(fecha, idUsuario, total);
         this.idVenta = idVenta;
         this.idCliente = idCliente;
         this.subtotal = subtotal;
@@ -70,7 +68,7 @@ public class Venta extends Transaccion {
     }
     
     /**
-     * Implementación del método abstracto getTipoTransaccion() - POLIMORFISMO
+     * Implementación del método abstracto getTipoTransaccion()
      * Cada clase hija implementa este método de forma diferente
      * @return Tipo de transacción
      */

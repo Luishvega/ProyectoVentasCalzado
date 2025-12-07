@@ -15,10 +15,7 @@ import Entidades.Talla;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-/**
- *
- * @author macbook
- */
+
 public class FrmProductos extends javax.swing.JInternalFrame {
 
     private ProductoDAO productoDAO = new ProductoDAO();

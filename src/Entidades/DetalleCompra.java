@@ -4,10 +4,7 @@
  */
 package Entidades;
 
-/**
- *
- * @author macbook
- */
+
 
 public class DetalleCompra {
     private int idDetalle;

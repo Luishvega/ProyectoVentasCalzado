@@ -15,10 +15,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.util.*;
-/**
- *
- * @author macbook
- */
+
 public class FrmVenta extends javax.swing.JInternalFrame {
 
     private VentaDAO ventaDAO = new VentaDAO();

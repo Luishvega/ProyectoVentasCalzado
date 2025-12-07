@@ -8,10 +8,7 @@ import Datos.Interfaces.ClienteInterface;
 import Entidades.Cliente;
 import java.sql.*;
 import java.util.*;
-/**
- *
- * @author macbook
- */
+
 
 public class ClienteDAO implements ClienteInterface {
 

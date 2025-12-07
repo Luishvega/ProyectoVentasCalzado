@@ -6,10 +6,7 @@ package Datos.Interfaces;
 
 import Entidades.Categoria;
 import java.util.List;
-/**
- *
- * @author macbook
- */
+
 
 public interface CategoriaInterface {
     boolean insertar(Categoria c);

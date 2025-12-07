@@ -6,10 +6,7 @@ package Datos.Interfaces;
 
 import Entidades.Usuario;
 import java.util.List;
-/**
- *
- * @author macbook
- */
+
 
 public interface UsuarioInterface {
     boolean insertar(Usuario u);

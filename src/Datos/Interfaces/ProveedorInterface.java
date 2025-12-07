@@ -6,10 +6,7 @@ package Datos.Interfaces;
 
 import Entidades.Proveedor;
 import java.util.List;
-/**
- *
- * @author macbook
- */
+
 
 public interface ProveedorInterface {
     boolean insertar(Proveedor p);

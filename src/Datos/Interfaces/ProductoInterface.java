@@ -6,10 +6,7 @@ package Datos.Interfaces;
 
 import Entidades.Producto;
 import java.util.List;
-/**
- *
- * @author macbook
- */
+
 
 public interface ProductoInterface {
     boolean insertar(Producto p);

@@ -9,10 +9,7 @@ import Datos.Interfaces.ProveedorInterface;
 import Entidades.Proveedor;
 import java.sql.*;
 import java.util.*;
-/**
- *
- * @author macbook
- */
+
 
 public class ProveedorDAO implements ProveedorInterface {
 

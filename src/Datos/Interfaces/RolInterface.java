@@ -7,10 +7,7 @@ package Datos.Interfaces;
 import Entidades.Rol;
 import java.util.List;
 
-/**
- *
- * @author macbook
- */
+
 
 public interface RolInterface {
     boolean insertar(Rol r);

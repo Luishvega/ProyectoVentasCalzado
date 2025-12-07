@@ -7,10 +7,7 @@ package Datos.Interfaces;
 import Entidades.DetalleVenta;
 import java.util.List;
 
-/**
- *
- * @author macbook
- */
+
 
 public interface DetalleVentaInterface {
     boolean insertar(DetalleVenta d);

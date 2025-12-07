@@ -8,10 +8,7 @@ import Datos.Interfaces.CompraInterface;
 import Entidades.Compra;
 import java.sql.*;
 import java.util.*;
-/**
- *
- * @author macbook
- */
+
 
 public class CompraDAO implements CompraInterface {
 

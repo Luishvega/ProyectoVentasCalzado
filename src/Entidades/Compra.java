@@ -5,10 +5,7 @@
 package Entidades;
 
 import java.util.Date;
-/**
- *
- * @author macbook
- */
+
 
 public class Compra {
     private int idCompra;

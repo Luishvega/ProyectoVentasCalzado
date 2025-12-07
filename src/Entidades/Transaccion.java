@@ -1,5 +1,5 @@
 /*
- * Clase abstracta Transaccion - Demuestra HERENCIA en POO
+ * Clase abstracta Transaccion
  * Esta clase es padre de Venta y Compra
  */
 package Entidades;
@@ -8,10 +8,7 @@ import java.util.Date;
 
 /**
  * Clase abstracta que define los atributos comunes de una transacción comercial.
- * Implementa el concepto de HERENCIA permitiendo que Venta y Compra
- * hereden estos atributos y métodos.
- * 
- * @author Proyecto Calzado
+ 
  */
 public abstract class Transaccion {
     
@@ -57,7 +54,6 @@ public abstract class Transaccion {
     }
     
     /**
-     * Método abstracto que demuestra POLIMORFISMO.
      * Cada clase hija (Venta, Compra) implementará este método de forma diferente.
      * @return Tipo de transacción
      */

@@ -4,10 +4,7 @@
  */
 package Presentacion;
 
-/**
- *
- * @author macbook
- */
+
 public class FrmLogin extends javax.swing.JFrame {
 
     /**

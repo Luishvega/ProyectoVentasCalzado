@@ -16,13 +16,12 @@ import java.util.List;
  * DAO para la entidad Categoria que HEREDA de BaseDAO.
  * Implementa los métodos abstractos definidos en la clase padre
  * y agrega métodos específicos para categorías.
- * 
- * @author Proyecto Calzado
+ 
  */
 public class CategoriaDAO extends BaseDAO<Categoria> {
 
     /**
-     * Implementación del método abstracto getNombreTabla() - POLIMORFISMO
+     * Implementación del método abstracto getNombreTabla()
      * @return Nombre de la tabla en la base de datos
      */
     @Override
@@ -31,7 +30,7 @@ public class CategoriaDAO extends BaseDAO<Categoria> {
     }
 
     /**
-     * Implementación del método abstracto insertar() - POLIMORFISMO
+     * Implementación del método abstracto insertar()
      * Usa el método heredado getConexion() de BaseDAO
      */
     @Override
@@ -56,7 +55,7 @@ public class CategoriaDAO extends BaseDAO<Categoria> {
     }
 
     /**
-     * Implementación del método abstracto listar() - POLIMORFISMO
+     * Implementación del método abstracto listar()
      * Lista solo categorías activas
      */
     @Override

@@ -1,15 +1,12 @@
 /*
- * Clase abstracta Persona - Demuestra HERENCIA en POO
+ * Clase abstracta Persona
  * Esta clase es padre de Cliente y otras entidades que representan personas
  */
 package Entidades;
 
 /**
  * Clase abstracta que define los atributos comunes de una persona.
- * Implementa el concepto de HERENCIA permitiendo que otras clases
- * hereden estos atributos y métodos.
- * 
- * @author Proyecto Calzado
+ 
  */
 public abstract class Persona {
     
@@ -75,8 +72,6 @@ public abstract class Persona {
     }
     
     /**
-     * Método abstracto que demuestra POLIMORFISMO.
-     * Cada clase hija implementará este método de forma diferente.
      * @return Descripción del tipo de persona
      */
     public abstract String getTipoPersona();

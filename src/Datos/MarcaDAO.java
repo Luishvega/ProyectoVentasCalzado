@@ -12,10 +12,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author macbook
- */
+
 public class MarcaDAO {
     
     // Insertar marca

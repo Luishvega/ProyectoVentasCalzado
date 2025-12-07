@@ -1,15 +1,12 @@
 /*
- * Clase Cliente - Hereda de Persona (HERENCIA)
- * Demuestra cómo una clase hija extiende la funcionalidad de la clase padre
+ * Clase Cliente
  */
 package Entidades;
 
 /**
- * Clase Cliente que HEREDA de la clase abstracta Persona.
  * Mantiene sus atributos propios (idCliente, dni) y hereda
  * los atributos comunes de Persona (nombres, apellidos, telefono, etc.)
- * 
- * @author Proyecto Calzado
+ 
  */
 public class Cliente extends Persona {
     
@@ -48,8 +45,7 @@ public class Cliente extends Persona {
     }
     
     /**
-     * Implementación del método abstracto getTipoPersona() - POLIMORFISMO
-     * Cada clase hija implementa este método de forma diferente
+     * Implementación del método abstracto getTipoPersona()
      * @return Tipo de persona
      */
     @Override
@@ -59,7 +55,6 @@ public class Cliente extends Persona {
     
     /**
      * Sobrescritura del método toString() para mostrar información del cliente
-     * @return Representación en texto del cliente
      */
     @Override
     public String toString() {

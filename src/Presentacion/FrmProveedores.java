@@ -9,10 +9,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-/**
- *
- * @author macbook
- */
+
 public class FrmProveedores extends javax.swing.JInternalFrame {
 
     private Datos.ProveedorDAO dao = new Datos.ProveedorDAO();

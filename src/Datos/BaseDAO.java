@@ -12,13 +12,9 @@ import java.util.List;
 
 /**
  * Clase abstracta genérica que define la estructura base para todos los DAOs.
- * Implementa el concepto de HERENCIA en la capa de acceso a datos.
- * 
- * Utiliza Generics (T) para permitir que las clases hijas trabajen
+ * Utiliza Genericos para permitir que las clases hijas trabajen
  * con diferentes tipos de entidades.
- * 
  * @param <T> Tipo de entidad que maneja el DAO
- * @author Proyecto Calzado
  */
 public abstract class BaseDAO<T> {
     
@@ -29,9 +25,7 @@ public abstract class BaseDAO<T> {
     
     /**
      * Método protegido para obtener conexión a la base de datos.
-     * Las clases hijas heredan este método y no necesitan repetir el código.
      * @return Conexión a la base de datos
-     * @throws Exception Si hay error de conexión
      */
     protected Connection getConexion() throws Exception {
         return Conexion.getConexion();
@@ -64,23 +58,20 @@ public abstract class BaseDAO<T> {
     }
     
     /**
-     * Método abstracto para insertar un registro - POLIMORFISMO
-     * Cada DAO implementará este método según su entidad.
+     * Método abstracto para insertar un registro
      * @param entidad Objeto a insertar
      * @return true si se insertó correctamente
      */
     public abstract boolean insertar(T entidad);
     
     /**
-     * Método abstracto para listar registros - POLIMORFISMO
-     * Cada DAO implementará este método según su entidad.
+     * Método abstracto para listar registros
      * @return Lista de entidades
      */
     public abstract List<T> listar();
     
     /**
-     * Método abstracto para obtener el nombre de la tabla - POLIMORFISMO
-     * Cada DAO retornará el nombre de su tabla correspondiente.
+     * Método abstracto para obtener el nombre de la tabla
      * @return Nombre de la tabla en la base de datos
      */
     public abstract String getNombreTabla();
