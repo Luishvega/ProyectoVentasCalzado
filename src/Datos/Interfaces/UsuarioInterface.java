@@ -11,6 +11,7 @@ import java.util.List;
 public interface UsuarioInterface {
     boolean insertar(Usuario u);
     boolean actualizar(Usuario u);
-    boolean eliminar(int idUsuario);
+    boolean desactivar(int idUsuario);
+    Usuario buscarPorNombreUsuario(String nombreUsuario);
     List<Usuario> listar(String filtro);
 }

@@ -11,7 +11,10 @@ import java.util.List;
 public interface CategoriaInterface {
     boolean insertar(Categoria c);
     boolean actualizar(Categoria c);
-    boolean eliminar(int idCategoria);
+    boolean desactivar(int idCategoria);
+    List<Categoria> listar();
+    List<Categoria> listarTodas();
     List<Categoria> listar(String filtro);
+    String buscarPorId(int idCategoria);
 }
     

@@ -4,10 +4,15 @@
  */
 package Presentacion;
 
-import Datos.ProductoDAO;
-import Datos.CategoriaDAO;
-import Datos.MarcaDAO;
-import Datos.TallaDAO;
+import Negocio.Interfaces.IProductoService;
+import Negocio.Interfaces.ICategoriaService;
+import Negocio.Interfaces.IMarcaService;
+import Negocio.Interfaces.ITallaService;
+import Negocio.Implementaciones.ProductoServiceImpl;
+import Negocio.Implementaciones.CategoriaServiceImpl;
+import Negocio.Implementaciones.MarcaServiceImpl;
+import Negocio.Implementaciones.TallaServiceImpl;
+import Negocio.NegocioException;
 import Entidades.Producto;
 import Entidades.Categoria;
 import Entidades.Marca;
@@ -18,31 +23,34 @@ import javax.swing.table.DefaultTableModel;
 
 public class FrmProductos extends javax.swing.JInternalFrame {
 
-    private ProductoDAO productoDAO = new ProductoDAO();
-    private CategoriaDAO categoriaDAO = new CategoriaDAO();
-    private MarcaDAO marcaDAO = new MarcaDAO();
-    private TallaDAO tallaDAO = new TallaDAO();
+    private final IProductoService productoService;
+    private final ICategoriaService categoriaService;
+    private final IMarcaService marcaService;
+    private final ITallaService tallaService;
 
     public FrmProductos() {
         initComponents();
         
-        // Habilitar opciones del menú de la ventana
-        setClosable(true);      // Permitir cerrar
-        setMaximizable(true);   // Permitir maximizar
-        setIconifiable(true);   // Permitir minimizar
-        setResizable(true);     // Permitir redimensionar
+        this.productoService = new ProductoServiceImpl();
+        this.categoriaService = new CategoriaServiceImpl();
+        this.marcaService = new MarcaServiceImpl();
+        this.tallaService = new TallaServiceImpl();
+        
+        setClosable(true);
+        setMaximizable(true);
+        setIconifiable(true);
+        setResizable(true);
         setTitle("Mantenimiento de Productos");
         
         cargarCategorias();
         cargarMarcas();
         cargarTallas();
         listarProductos("");
-        generarCodigoBarras(); // genera automáticamente al abrir el formulario
+        generarCodigoBarras();
     }
    
-    // Listar productos en la tabla
     private void listarProductos(String filtro) {
-        List<Producto> lista = productoDAO.listar(filtro);
+        List<Producto> lista = productoService.buscar(filtro);
         DefaultTableModel modelo = (DefaultTableModel) tblProductos.getModel();
         modelo.setRowCount(0);
 
@@ -51,9 +59,9 @@ public class FrmProductos extends javax.swing.JInternalFrame {
             p.getIdProducto(),
             p.getCodigobarras(),
             p.getNombre(),
-            categoriaDAO.buscarPorId(p.getIdCategoria()),
-            marcaDAO.buscarPorId(p.getIdmarca()),
-            tallaDAO.buscarPorId(p.getIdtalla()),
+            categoriaService.buscarNombrePorId(p.getIdCategoria()),
+            marcaService.buscarNombrePorId(p.getIdmarca()),
+            tallaService.buscarEtiquetaPorId(p.getIdtalla()),
             p.getColor(),
             p.getPrecio(),
             p.getStock(),
@@ -64,48 +72,43 @@ public class FrmProductos extends javax.swing.JInternalFrame {
     }
     
     private void generarCodigoBarras() {
-    int ultimo = productoDAO.obtenerUltimoCodigo();
-    // Genera el siguiente código con prefijo y ceros a la izquierda
+    int ultimo = productoService.obtenerUltimoCodigo();
     String nuevoCodigo = "CB-" + String.format("%05d", ultimo + 1);
     txtCodigoBarras.setText(nuevoCodigo);
 }
-
-    // Cargar combobox en la ID
     
    private void cargarCategorias() {
     cmbCategoria.removeAllItems();
-    for (Categoria c : categoriaDAO.listar()) {
+    for (Categoria c : categoriaService.listar()) {
         cmbCategoria.addItem(c.getNombre());
     }
 }
 
     private void cargarMarcas() {
         cmbMarca.removeAllItems();
-        for (Marca m : marcaDAO.listar()) {
+        for (Marca m : marcaService.listar()) {
             cmbMarca.addItem(m.getNombre());
         }
     }
 
     private void cargarTallas() {
     cmbTalla.removeAllItems();
-    for (Talla t : tallaDAO.listar()) {
+    for (Talla t : tallaService.listar()) {
         cmbTalla.addItem(t.getEtiqueta());
     }
 }
     
    
-    // OBTENER NOMBRES PARA TABLA
-    
     private String obtenerNombreCategoria(int idCategoria) {
-        return categoriaDAO.buscarPorId(idCategoria);
+        return categoriaService.buscarNombrePorId(idCategoria);
     }
 
     private String obtenerNombreMarca(int idMarca) {
-        return marcaDAO.buscarPorId(idMarca);
+        return marcaService.buscarNombrePorId(idMarca);
     }
 
     private String obtenerEtiquetaTalla(int idTalla) {
-        return tallaDAO.buscarPorId(idTalla);
+        return tallaService.buscarEtiquetaPorId(idTalla);
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -345,13 +348,15 @@ public class FrmProductos extends javax.swing.JInternalFrame {
             p.setDescripcion(txtDescripcion.getText());
             p.setEstado(chkEstado.isSelected() ? 1 : 0);
 
-            if (productoDAO.insertar(p)) {
+            if (productoService.insertar(p)) {
                 JOptionPane.showMessageDialog(this, "Producto registrado correctamente");
                 listarProductos("");
-                generarCodigoBarras(); // prepara el siguiente código automáticamente
+                generarCodigoBarras();
               } else {
                    JOptionPane.showMessageDialog(this, "Error al registrar producto");
 }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
@@ -379,12 +384,14 @@ public class FrmProductos extends javax.swing.JInternalFrame {
             p.setDescripcion(txtDescripcion.getText());
             p.setEstado(chkEstado.isSelected() ? 1 : 0);
 
-            if (productoDAO.actualizar(p)) {
+            if (productoService.actualizar(p)) {
                 JOptionPane.showMessageDialog(this, "Producto actualizado correctamente");
                 listarProductos("");
             } else {
                 JOptionPane.showMessageDialog(this, "Error al actualizar producto");
             }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
@@ -397,12 +404,16 @@ public class FrmProductos extends javax.swing.JInternalFrame {
             return;
         }
 
-        int idProducto = (int) tblProductos.getValueAt(fila, 0);
-        if (productoDAO.eliminar(idProducto)) {
-            JOptionPane.showMessageDialog(this, "Producto eliminado correctamente");
-            listarProductos("");
-        } else {
-            JOptionPane.showMessageDialog(this, "Error al eliminar producto");
+        try {
+            int idProducto = (int) tblProductos.getValueAt(fila, 0);
+            if (productoService.desactivar(idProducto)) {
+                JOptionPane.showMessageDialog(this, "Producto desactivado correctamente");
+                listarProductos("");
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al desactivar producto");
+            }
+        } catch (NegocioException e) {
+            JOptionPane.showMessageDialog(this, e.getMessage());
         }
     }//GEN-LAST:event_btnEliminarActionPerformed
 

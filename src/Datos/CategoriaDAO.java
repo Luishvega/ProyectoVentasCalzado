@@ -1,10 +1,11 @@
 /*
- * CategoriaDAO - Hereda de BaseDAO (HERENCIA en capa de datos)
+ * CategoriaDAO
  * Demuestra cómo un DAO extiende la funcionalidad de BaseDAO
  */
 package Datos;
 
 import Conexion.Conexion;
+import Datos.Interfaces.CategoriaInterface;
 import Entidades.Categoria;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,34 +13,20 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * DAO para la entidad Categoria que HEREDA de BaseDAO.
- * Implementa los métodos abstractos definidos en la clase padre
- * y agrega métodos específicos para categorías.
- 
- */
-public class CategoriaDAO extends BaseDAO<Categoria> {
+public class CategoriaDAO extends BaseDAO<Categoria> implements CategoriaInterface {
 
-    /**
-     * Implementación del método abstracto getNombreTabla()
-     * @return Nombre de la tabla en la base de datos
-     */
     @Override
     public String getNombreTabla() {
         return "categoria";
     }
 
-    /**
-     * Implementación del método abstracto insertar()
-     * Usa el método heredado getConexion() de BaseDAO
-     */
     @Override
     public boolean insertar(Categoria c) {
         boolean resp = false;
         Connection cn = null;
         PreparedStatement ps = null;
         try {
-            cn = getConexion(); // Método heredado de BaseDAO
+            cn = getConexion();
             ps = cn.prepareStatement(
                 "INSERT INTO categoria (nombre, descripcion, estado) VALUES (?, ?, ?)");
             ps.setString(1, c.getNombre());
@@ -49,15 +36,11 @@ public class CategoriaDAO extends BaseDAO<Categoria> {
         } catch (Exception e) {
             System.out.println("Error al insertar categoría: " + e.getMessage());
         } finally {
-            cerrarRecursos(cn, ps); // Método heredado de BaseDAO
+            cerrarRecursos(cn, ps);
         }
         return resp;
     }
 
-    /**
-     * Implementación del método abstracto listar()
-     * Lista solo categorías activas
-     */
     @Override
     public List<Categoria> listar() {
         List<Categoria> lista = new ArrayList<>();
@@ -66,7 +49,7 @@ public class CategoriaDAO extends BaseDAO<Categoria> {
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            cn = getConexion(); // Método heredado
+            cn = getConexion();
             ps = cn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -80,16 +63,12 @@ public class CategoriaDAO extends BaseDAO<Categoria> {
         } catch (Exception e) {
             System.out.println("Error al listar categorías: " + e.getMessage());
         } finally {
-            cerrarRecursos(cn, ps, rs); // Método heredado
+            cerrarRecursos(cn, ps, rs);
         }
         return lista;
     }
 
-    // ========== Métodos adicionales específicos de CategoriaDAO ==========
-
-    /**
-     * Actualizar categoría
-     */
+    @Override
     public boolean actualizar(Categoria c) {
         boolean resp = false;
         try (Connection cn = Conexion.getConexion();
@@ -106,9 +85,7 @@ public class CategoriaDAO extends BaseDAO<Categoria> {
         return resp;
     }
 
-    /**
-     * Desactivar categoría (cambiar estado a 0)
-     */
+    @Override
     public boolean desactivar(int idCategoria) {
         boolean resp = false;
         try (Connection cn = Conexion.getConexion();
@@ -122,9 +99,7 @@ public class CategoriaDAO extends BaseDAO<Categoria> {
         return resp;
     }
 
-    /**
-     * Listar todas las categorías (activas e inactivas)
-     */
+    @Override
     public List<Categoria> listarTodas() {
         List<Categoria> lista = new ArrayList<>();
         String sql = "SELECT id_categoria, nombre, descripcion, estado FROM categoria ORDER BY nombre";
@@ -145,9 +120,7 @@ public class CategoriaDAO extends BaseDAO<Categoria> {
         return lista;
     }
 
-    /**
-     * Listar categorías con filtro (para búsquedas)
-     */
+    @Override
     public List<Categoria> listar(String filtro) {
         List<Categoria> lista = new ArrayList<>();
         String sql = "SELECT id_categoria, nombre, descripcion, estado FROM categoria WHERE nombre LIKE ?";
@@ -169,9 +142,7 @@ public class CategoriaDAO extends BaseDAO<Categoria> {
         return lista;
     }
 
-    /**
-     * Buscar nombre por ID (para mostrar en tabla de productos)
-     */
+    @Override
     public String buscarPorId(int idCategoria) {
         String nombre = "";
         String sql = "SELECT nombre FROM categoria WHERE id_categoria=?";

@@ -45,14 +45,35 @@ public class ProveedorDAO implements ProveedorInterface {
     }
 
     @Override
-    public boolean eliminar(int idProveedor) {
-        String sql = "DELETE FROM proveedor WHERE id_proveedor=?";
+    public boolean desactivar(int idProveedor) {
+        String sql = "UPDATE proveedor SET estado=0 WHERE id_proveedor=?";
         try (Connection cn = Conexion.getConexion();
              PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idProveedor);
             return ps.executeUpdate() > 0;
         } catch (Exception e) { e.printStackTrace(); }
         return false;
+    }
+
+    @Override
+    public Proveedor buscarPorRuc(String ruc) {
+        String sql = "SELECT * FROM proveedor WHERE ruc=?";
+        try (Connection cn = Conexion.getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, ruc);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Proveedor p = new Proveedor();
+                p.setIdProveedor(rs.getInt("id_proveedor"));
+                p.setRazonSocial(rs.getString("razon_social"));
+                p.setRuc(rs.getString("ruc"));
+                p.setTelefono(rs.getString("telefono"));
+                p.setDireccion(rs.getString("direccion"));
+                p.setEstado(rs.getInt("estado"));
+                return p;
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return null;
     }
 
     @Override

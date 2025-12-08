@@ -277,7 +277,7 @@ private void configurarTabla() {
     }
     int id = (int) tblProveedores.getValueAt(row, 0);
 
-    if (dao.eliminar(id)) {
+    if (dao.desactivar(id)) {
         JOptionPane.showMessageDialog(this, "Proveedor dado de baja.");
         cargarTabla("");
     } else {

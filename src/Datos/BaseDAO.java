@@ -1,5 +1,5 @@
 /*
- * Clase abstracta BaseDAO - Demuestra HERENCIA en la capa de datos
+ * Clase abstracta BaseDAO
  * Esta clase es padre de todos los DAOs del sistema
  */
 package Datos;

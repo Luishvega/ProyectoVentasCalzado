@@ -5,6 +5,7 @@
 package Datos;
 
 import Conexion.Conexion;
+import Datos.Interfaces.MarcaInterface;
 import Entidades.Marca;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +13,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class MarcaDAO {
+public class MarcaDAO implements MarcaInterface {
     
-    // Insertar marca
+    @Override
     public boolean insertar(Marca m) {
         boolean resp = false;
         try (Connection cn = Conexion.getConexion();
@@ -30,7 +30,7 @@ public class MarcaDAO {
         return resp;
     }
     
-    // Actualizar marca
+    @Override
     public boolean actualizar(Marca m) {
         boolean resp = false;
         try (Connection cn = Conexion.getConexion();
@@ -46,7 +46,7 @@ public class MarcaDAO {
         return resp;
     }
     
-    // Desactivar marca (cambiar estado a 0)
+    @Override
     public boolean desactivar(int idMarca) {
         boolean resp = false;
         try (Connection cn = Conexion.getConexion();
@@ -60,7 +60,7 @@ public class MarcaDAO {
         return resp;
     }
     
-    // Listar todas las marcas (activas e inactivas)
+    @Override
     public List<Marca> listarTodas() {
         List<Marca> lista = new ArrayList<>();
         String sql = "SELECT id_marca, nombre, estado FROM marca ORDER BY nombre";
@@ -80,7 +80,7 @@ public class MarcaDAO {
         return lista;
     }
     
-    // Listar solo marcas activas (para combos)
+    @Override
     public List<Marca> listar() {
         List<Marca> lista = new ArrayList<>();
         String sql = "SELECT id_marca, nombre, estado FROM marca WHERE estado=1 ORDER BY nombre";
@@ -100,6 +100,7 @@ public class MarcaDAO {
         return lista;
     }
 
+    @Override
     public String buscarPorId(int id) {
         try (Connection cn = Conexion.getConexion();
              PreparedStatement ps = cn.prepareStatement("SELECT nombre FROM marca WHERE id_marca=?")) {

@@ -5,6 +5,7 @@
 package Datos;
 
 import Conexion.Conexion;
+import Datos.Interfaces.UsuarioInterface;
 import Entidades.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +13,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+public class UsuarioDAO implements UsuarioInterface {
 
-public class UsuarioDAO {
-
-    // Insertar usuario
+    @Override
     public boolean insertar(Usuario u) {
         boolean resp = false;
         Connection cn = null;
@@ -37,7 +37,7 @@ public class UsuarioDAO {
         return resp;
     }
 
-    // Actualizar usuario
+    @Override
     public boolean actualizar(Usuario u) {
         boolean resp = false;
         Connection cn = null;
@@ -60,26 +60,54 @@ public class UsuarioDAO {
         return resp;
     }
 
-    // Eliminar usuario
-    public boolean eliminar(int idUsuario) {
+    @Override
+    public boolean desactivar(int idUsuario) {
         boolean resp = false;
         Connection cn = null;
         PreparedStatement ps = null;
         try {
             cn = Conexion.getConexion();
-            String sql = "DELETE FROM usuario WHERE id_usuario=?";
+            String sql = "UPDATE usuario SET estado=0 WHERE id_usuario=?";
             ps = cn.prepareStatement(sql);
             ps.setInt(1, idUsuario);
             resp = ps.executeUpdate() > 0;
         } catch (Exception e) {
-            System.out.println("Error al eliminar usuario: " + e.getMessage());
+            System.out.println("Error al desactivar usuario: " + e.getMessage());
         } finally {
             try { if (ps != null) ps.close(); if (cn != null) cn.close(); } catch (Exception ex) {}
         }
         return resp;
     }
 
-    // Listar usuarios
+    @Override
+    public Usuario buscarPorNombreUsuario(String nombreUsuario) {
+        Usuario u = null;
+        Connection cn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            cn = Conexion.getConexion();
+            String sql = "SELECT * FROM usuario WHERE nombre_usuario=?";
+            ps = cn.prepareStatement(sql);
+            ps.setString(1, nombreUsuario);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                u = new Usuario();
+                u.setIdUsuario(rs.getInt("id_usuario"));
+                u.setNombreUsuario(rs.getString("nombre_usuario"));
+                u.setContrasenia(rs.getString("contrasenia"));
+                u.setIdRol(rs.getInt("id_rol"));
+                u.setEstado(rs.getInt("estado"));
+            }
+        } catch (Exception e) {
+            System.out.println("Error al buscar usuario: " + e.getMessage());
+        } finally {
+            try { if (rs != null) rs.close(); if (ps != null) ps.close(); if (cn != null) cn.close(); } catch (Exception ex) {}
+        }
+        return u;
+    }
+
+    @Override
     public List<Usuario> listar(String filtro) {
         List<Usuario> lista = new ArrayList<>();
         Connection cn = null;

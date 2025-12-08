@@ -11,6 +11,10 @@ import java.util.List;
 public interface ProductoInterface {
     boolean insertar(Producto p);
     boolean actualizar(Producto p);
-    boolean eliminar(int idProducto);
+    boolean desactivar(int idProducto);
     List<Producto> listar(String filtro);
+    Producto buscarPorId(int idProducto);
+    Producto buscarPorCodigoBarras(String codigoBarras);
+    int obtenerUltimoCodigo();
+    boolean actualizarStock(int idProducto, int cantidad);
 }

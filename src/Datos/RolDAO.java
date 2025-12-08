@@ -5,6 +5,7 @@
 package Datos;
 
 import Conexion.Conexion;
+import Datos.Interfaces.RolInterface;
 import Entidades.Rol;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +13,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+public class RolDAO implements RolInterface {
 
-public class RolDAO {
-
-    // Insertar rol
+    @Override
     public boolean insertar(Rol r) {
         boolean resp = false;
         Connection cn = null;
@@ -34,7 +34,7 @@ public class RolDAO {
         return resp;
     }
 
-    // Actualizar rol
+    @Override
     public boolean actualizar(Rol r) {
         boolean resp = false;
         Connection cn = null;
@@ -54,7 +54,7 @@ public class RolDAO {
         return resp;
     }
 
-    // Eliminar rol
+    @Override
     public boolean eliminar(int idRol) {
         boolean resp = false;
         Connection cn = null;
@@ -73,7 +73,7 @@ public class RolDAO {
         return resp;
     }
 
-    // Listar roles
+    @Override
     public List<Rol> listar() {
         List<Rol> lista = new ArrayList<>();
         Connection cn = null;

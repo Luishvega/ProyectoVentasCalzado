@@ -5,6 +5,7 @@
 package Datos;
 
 import Conexion.Conexion;
+import Datos.Interfaces.TallaInterface;
 import Entidades.Talla;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,9 +13,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TallaDAO {
+public class TallaDAO implements TallaInterface {
 
-    // Listar todas las tallas activas (para combos)
+    @Override
     public List<Talla> listar() {
         List<Talla> lista = new ArrayList<>();
         String sql = "SELECT id_talla, etiqueta, estado FROM talla WHERE estado=1";
@@ -34,7 +35,7 @@ public class TallaDAO {
         return lista;
     }
 
-    // Listar tallas con filtro (para búsquedas)
+    @Override
     public List<Talla> listar(String filtro) {
         List<Talla> lista = new ArrayList<>();
         String sql = "SELECT id_talla, etiqueta, estado FROM talla WHERE etiqueta LIKE ? AND estado=1";
@@ -55,7 +56,7 @@ public class TallaDAO {
         return lista;
     }
 
-    // Buscar etiqueta por ID (para mostrar en tabla de productos)
+    @Override
     public String buscarPorId(int idTalla) {
         String etiqueta = "";
         String sql = "SELECT etiqueta FROM talla WHERE id_talla=?";

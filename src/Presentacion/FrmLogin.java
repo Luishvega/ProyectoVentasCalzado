@@ -4,16 +4,20 @@
  */
 package Presentacion;
 
+import Negocio.Interfaces.IUsuarioService;
+import Negocio.Implementaciones.UsuarioServiceImpl;
+import Negocio.NegocioException;
+import Entidades.Usuario;
 
 public class FrmLogin extends javax.swing.JFrame {
+    
+    private final IUsuarioService usuarioService;
 
-    /**
-     * Creates new form FrmLogin
-     */
     public FrmLogin() {
     initComponents();
-    setLocationRelativeTo(null); // Centrar
+    setLocationRelativeTo(null);
     lblMensaje.setText("");
+    this.usuarioService = new UsuarioServiceImpl();
 }
     
     
@@ -96,33 +100,17 @@ public class FrmLogin extends javax.swing.JFrame {
 
     private void btnIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarActionPerformed
     
-        
         String user = txtUsuario.getText().trim();
-    String pass = new String(txtContrasenia.getPassword());
+        String pass = new String(txtContrasenia.getPassword());
 
-    if (user.isEmpty() || pass.isEmpty()) {
-        lblMensaje.setText("Ingrese usuario y contraseña.");
-        return;
-    }
-
-    Datos.UsuarioDAO dao = new Datos.UsuarioDAO();
-java.util.List<Entidades.Usuario> lista = dao.listar(user);
-
-for (Entidades.Usuario u : lista) {
-    if (u.getNombreUsuario().equals(user) &&
-        u.getContrasenia().equals(pass) &&
-        u.getEstado() == 1) {
-
-        // Pasamos el usuario logueado al FrmPrincipal
-        Presentacion.FrmPrincipal frm = new Presentacion.FrmPrincipal(u);
-        frm.setVisible(true);
-        this.dispose();
-        return;
-    }
-}
-
-lblMensaje.setText("Usuario o contraseña incorrectos, o usuario inactivo.");
-    
+        try {
+            Usuario usuario = usuarioService.autenticar(user, pass);
+            Presentacion.FrmPrincipal frm = new Presentacion.FrmPrincipal(usuario);
+            frm.setVisible(true);
+            this.dispose();
+        } catch (NegocioException e) {
+            lblMensaje.setText(e.getMessage());
+        }
     
     }//GEN-LAST:event_btnIngresarActionPerformed
 

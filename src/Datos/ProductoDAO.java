@@ -5,6 +5,7 @@
 package Datos;
 
 import Conexion.Conexion;
+import Datos.Interfaces.ProductoInterface;
 import Entidades.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,10 +13,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+public class ProductoDAO implements ProductoInterface {
 
-public class ProductoDAO {
-
-    // Insertar producto
+    @Override
     public boolean insertar(Producto p) {
         boolean resp = false;
         Connection cn = null;
@@ -44,9 +44,7 @@ public class ProductoDAO {
         return resp;
     }
     
-    
-
-    // Actualizar producto
+    @Override
     public boolean actualizar(Producto p) {
         boolean resp = false;
         Connection cn = null;
@@ -76,8 +74,7 @@ public class ProductoDAO {
         return resp;
     }
 
-    //método para obtener el último código
-    
+    @Override
     public int obtenerUltimoCodigo() {
     int ultimo = 0;
     String sql = "SELECT MAX(codigo_barras) as maximo FROM producto";
@@ -93,25 +90,26 @@ public class ProductoDAO {
     return ultimo;
 }
     
-    // Eliminar producto
-    public boolean eliminar(int idProducto) {
+    @Override
+    public boolean desactivar(int idProducto) {
         boolean resp = false;
         Connection cn = null;
         PreparedStatement ps = null;
         try {
             cn = Conexion.getConexion();
-            String sql = "DELETE FROM producto WHERE idProducto=?";
+            String sql = "UPDATE producto SET estado=0 WHERE idProducto=?";
             ps = cn.prepareStatement(sql);
             ps.setInt(1, idProducto);
             resp = ps.executeUpdate() > 0;
         } catch (Exception e) {
-            System.out.println("Error al eliminar producto: " + e.getMessage());
+            System.out.println("Error al desactivar producto: " + e.getMessage());
         } finally {
             try { if (ps != null) ps.close(); if (cn != null) cn.close(); } catch (Exception ex) {}
         }
         return resp;
     }
     
+    @Override
     public Producto buscarPorId(int idProducto) {
     String sql = "SELECT * FROM producto WHERE idProducto=?";
     try (Connection cn = Conexion.getConexion();
@@ -139,23 +137,27 @@ public class ProductoDAO {
     return null;
 }
 
-
-
-
-    //método para obtener un producto por su ID
-    public Producto obtenerPorId(int idProducto) {
+    @Override
+    public Producto buscarPorCodigoBarras(String codigoBarras) {
     Producto p = null;
-    String sql = "SELECT idProducto, nombre, precio, stock FROM producto WHERE idProducto = ?";
+    String sql = "SELECT * FROM producto WHERE codigo_barras = ?";
     try (Connection cn = Conexion.getConexion();
          PreparedStatement ps = cn.prepareStatement(sql)) {
-        ps.setInt(1, idProducto);
+        ps.setString(1, codigoBarras);
         ResultSet rs = ps.executeQuery();
         if (rs.next()) {
             p = new Producto();
             p.setIdProducto(rs.getInt("idProducto"));
+            p.setCodigobarras(rs.getString("codigo_barras"));
             p.setNombre(rs.getString("nombre"));
+            p.setIdCategoria(rs.getInt("idCategoria"));
+            p.setIdmarca(rs.getInt("idMarca"));
+            p.setIdtalla(rs.getInt("idTalla"));
+            p.setColor(rs.getString("color"));
             p.setPrecio(rs.getDouble("precio"));
             p.setStock(rs.getInt("stock"));
+            p.setDescripcion(rs.getString("descripcion"));
+            p.setEstado(rs.getInt("estado"));
         }
     } catch (Exception e) {
         e.printStackTrace();
@@ -163,8 +165,27 @@ public class ProductoDAO {
     return p;
 }
 
+    @Override
+    public boolean actualizarStock(int idProducto, int cantidad) {
+        boolean resp = false;
+        Connection cn = null;
+        PreparedStatement ps = null;
+        try {
+            cn = Conexion.getConexion();
+            String sql = "UPDATE producto SET stock = stock - ? WHERE idProducto = ?";
+            ps = cn.prepareStatement(sql);
+            ps.setInt(1, cantidad);
+            ps.setInt(2, idProducto);
+            resp = ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            System.out.println("Error al actualizar stock: " + e.getMessage());
+        } finally {
+            try { if (ps != null) ps.close(); if (cn != null) cn.close(); } catch (Exception ex) {}
+        }
+        return resp;
+    }
     
-    // Listar productos
+    @Override
     public List<Producto> listar(String filtro) {
         List<Producto> lista = new ArrayList<>();
         Connection cn = null;

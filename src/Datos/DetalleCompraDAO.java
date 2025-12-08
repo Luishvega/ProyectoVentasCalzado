@@ -5,6 +5,7 @@
 package Datos;
 
 import Conexion.Conexion;
+import Datos.Interfaces.DetalleCompraInterface;
 import Entidades.DetalleCompra;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,11 +13,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+public class DetalleCompraDAO implements DetalleCompraInterface {
 
-
-public class DetalleCompraDAO {
-
-    // Insertar detalle de compra
+    @Override
     public boolean insertar(DetalleCompra d) {
         boolean resp = false;
         Connection cn = null;
@@ -39,7 +38,7 @@ public class DetalleCompraDAO {
         return resp;
     }
 
-    // Listar detalles por compra
+    @Override
     public List<DetalleCompra> listarPorCompra(int idCompra) {
         List<DetalleCompra> lista = new ArrayList<>();
         Connection cn = null;

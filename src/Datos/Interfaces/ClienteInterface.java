@@ -11,7 +11,8 @@ import java.util.List;
 public interface ClienteInterface {
     boolean insertar(Cliente c);
     boolean actualizar(Cliente c);
-    boolean eliminar(int idCliente);
+    boolean desactivar(int idCliente);
     Cliente buscarPorId(int idCliente);
+    Cliente buscarPorDocumento(String documento);
     List<Cliente> listar(String filtro);
 }

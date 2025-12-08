@@ -11,8 +11,9 @@ import java.util.List;
 public interface ProveedorInterface {
     boolean insertar(Proveedor p);
     boolean actualizar(Proveedor p);
-    boolean eliminar(int idProveedor);
+    boolean desactivar(int idProveedor);
     Proveedor buscarPorId(int idProveedor);
+    Proveedor buscarPorRuc(String ruc);
     List<Proveedor> listar(String filtro);
 }
 

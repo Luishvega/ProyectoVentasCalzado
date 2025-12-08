@@ -7,9 +7,13 @@ package Presentacion;
 import Entidades.Venta;
 import Entidades.DetalleVenta;
 import Entidades.Producto;
-import Datos.VentaDAO;
-import Datos.ProductoDAO;
-import Datos.ClienteDAO;
+import Negocio.Interfaces.IVentaService;
+import Negocio.Interfaces.IProductoService;
+import Negocio.Interfaces.IClienteService;
+import Negocio.Implementaciones.VentaServiceImpl;
+import Negocio.Implementaciones.ProductoServiceImpl;
+import Negocio.Implementaciones.ClienteServiceImpl;
+import Negocio.NegocioException;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,10 +22,9 @@ import java.util.*;
 
 public class FrmVenta extends javax.swing.JInternalFrame {
 
-    private VentaDAO ventaDAO = new VentaDAO();
-    private ProductoDAO productoDAO = new ProductoDAO();
-    private ClienteDAO clienteDAO = new ClienteDAO();
-    
+    private final IVentaService ventaService;
+    private final IProductoService productoService;
+    private final IClienteService clienteService;
     
     private DefaultTableModel modeloDetalle;
     private Map<Integer, String> clientesMapa = new LinkedHashMap<>();
@@ -29,7 +32,10 @@ public class FrmVenta extends javax.swing.JInternalFrame {
     public FrmVenta() {
         initComponents();
         
-        // Habilitar opciones del menú de la ventana
+        this.ventaService = new VentaServiceImpl();
+        this.productoService = new ProductoServiceImpl();
+        this.clienteService = new ClienteServiceImpl();
+        
         setClosable(true);
         setMaximizable(true);
         setIconifiable(true);
@@ -40,7 +46,7 @@ public class FrmVenta extends javax.swing.JInternalFrame {
         cargarClientes();
         mostrarFecha();
         actualizarTotales();
-        txtNombreProducto.setEditable(false); // no editable
+        txtNombreProducto.setEditable(false);
         
     }
 
@@ -63,7 +69,7 @@ public class FrmVenta extends javax.swing.JInternalFrame {
     
     
    private void cargarClientes() {
-       clientesMapa = clienteDAO.listarMapa();
+       clientesMapa = clienteService.listarMapa();
              cboCliente.removeAllItems();
     for (String nombre : clientesMapa.values()) {
         cboCliente.addItem(nombre);
@@ -131,7 +137,10 @@ public FrmVenta(int idUsuario) {
     initComponents();
     this.idUsuario = idUsuario;
     
-    // Habilitar opciones del menú de la ventana
+    this.ventaService = new VentaServiceImpl();
+    this.productoService = new ProductoServiceImpl();
+    this.clienteService = new ClienteServiceImpl();
+    
     setClosable(true);
     setMaximizable(true);
     setIconifiable(true);
@@ -382,12 +391,12 @@ public FrmVenta(int idUsuario) {
 
     try {
         int idProducto = Integer.parseInt(txtIdProducto.getText().trim());
-        Producto p = productoDAO.buscarPorId(idProducto); // usa siempre el mismo método
+        Producto p = productoService.buscarPorId(idProducto);
 
         if (p != null) {
             txtNombreProducto.setText(p.getNombre());
             txtPrecio.setText(String.valueOf(p.getPrecio()));
-            txtStockDisp.setText(String.valueOf(p.getStock())); // usa txtStockDisp
+            txtStockDisp.setText(String.valueOf(p.getStock()));
             
         } else {
             JOptionPane.showMessageDialog(this, "Producto no encontrado");
@@ -438,32 +447,20 @@ public FrmVenta(int idUsuario) {
 
     private void btnGuardarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarVentaActionPerformed
     try {
-         // 1. Cabecera
         Venta venta = new Venta();
         venta.setIdCliente(getIdClienteSeleccionado()); 
-        venta.setIdUsuario(idUsuario); // transmitido desde login
+        venta.setIdUsuario(idUsuario);
 
-        double subtotal = getSubtotal();
-        double igv = getIGV(subtotal);
-        double total = subtotal + igv;
-
-        venta.setSubtotal(subtotal);
-        venta.setIgv(igv);
-        venta.setTotal(total);
-
-        // 2. Detalles
         List<DetalleVenta> listaDetalles = new ArrayList<>();
         for (int i = 0; i < tblDetalle.getRowCount(); i++) {
             DetalleVenta d = new DetalleVenta();
             d.setIdProducto((int) tblDetalle.getValueAt(i, 0));
             d.setCantidad((int) tblDetalle.getValueAt(i, 2));
             d.setPrecioUnitario((double) tblDetalle.getValueAt(i, 3));
-            d.setSubtotal(d.getCantidad() * d.getPrecioUnitario());
             listaDetalles.add(d);
         }
 
-        // 3. Guardar
-        boolean ok = ventaDAO.registrarVentaConDetalles(venta, listaDetalles);
+        boolean ok = ventaService.registrarVentaCompleta(venta, listaDetalles);
         if (ok) {
             JOptionPane.showMessageDialog(this, "Venta registrada correctamente");
             limpiarVenta();
@@ -471,6 +468,8 @@ public FrmVenta(int idUsuario) {
             JOptionPane.showMessageDialog(this, "No se pudo registrar la venta");
         }
 
+    } catch (NegocioException e) {
+        JOptionPane.showMessageDialog(this, e.getMessage());
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         e.printStackTrace();
@@ -488,7 +487,7 @@ public FrmVenta(int idUsuario) {
 
     try {
         int idProd = Integer.parseInt(txtIdProducto.getText().trim());
-        Producto p = productoDAO.buscarPorId(idProd); //  usa el mismo método
+        Producto p = productoService.buscarPorId(idProd);
 
         if (p != null) {
             txtNombreProducto.setText(p.getNombre());

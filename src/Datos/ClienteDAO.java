@@ -46,14 +46,36 @@ public class ClienteDAO implements ClienteInterface {
     }
 
     @Override
-    public boolean eliminar(int idCliente) {
-        String sql = "DELETE FROM cliente WHERE id_cliente=?";
+    public boolean desactivar(int idCliente) {
+        String sql = "UPDATE cliente SET estado=0 WHERE id_cliente=?";
         try (Connection cn = Conexion.getConexion();
              PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idCliente);
             return ps.executeUpdate() > 0;
         } catch (Exception e) { e.printStackTrace(); }
         return false;
+    }
+
+    @Override
+    public Cliente buscarPorDocumento(String documento) {
+        String sql = "SELECT * FROM cliente WHERE dni=?";
+        try (Connection cn = Conexion.getConexion();
+             PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, documento);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Cliente c = new Cliente();
+                c.setIdCliente(rs.getInt("id_cliente"));
+                c.setNombres(rs.getString("nombres"));
+                c.setApellidos(rs.getString("apellidos"));
+                c.setDni(rs.getString("dni"));
+                c.setDireccion(rs.getString("direccion"));
+                c.setTelefono(rs.getString("telefono"));
+                c.setEstado(rs.getInt("estado"));
+                return c;
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return null;
     }
 
     @Override

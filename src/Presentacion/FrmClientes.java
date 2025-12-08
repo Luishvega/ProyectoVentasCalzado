@@ -293,7 +293,7 @@ private void limpiarCampos() {
     }
     int id = (int) tblClientes.getValueAt(row, 0);
 
-    if (dao.eliminar(id)) {
+    if (dao.desactivar(id)) {
         JOptionPane.showMessageDialog(this, "Cliente dado de baja.");
         cargarTabla("");
     } else {
