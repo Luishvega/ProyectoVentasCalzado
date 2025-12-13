@@ -5,9 +5,9 @@
 -- Columnas EXACTAS según los DAOs del proyecto
 -- =====================================================
 
-DROP DATABASE IF EXISTS dbcalzado;
-CREATE DATABASE dbcalzado CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE dbcalzado;
+DROP DATABASE IF EXISTS dbcalzadov2;
+CREATE DATABASE dbcalzadov2 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE dbcalzadov2;
 
 -- =====================================================
 -- TABLAS MAESTRAS
